@@ -1,0 +1,70 @@
+{
+  "name": "mpremote",
+  "displayName": "mpremote",
+  "description": "Command palette access MicroPython mpremote",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.73.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:mpremote.devs",
+    "onCommand:mpremote.ls",
+    "onCommand:mpremote.upload",
+    "onCommand:mpremote.repl",
+    "onCommand:mpremote.mipinstall",
+    "onCommand:mpremote.disconnect",
+    "onCommand:mpremote.run"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "mpremote.devs",
+        "title": "MPRemote: Scan for Devices (devs)"
+      },
+      {
+        "command": "mpremote.ls",
+        "title": "MPRemote: List files (ls)"
+      },
+      {
+        "command": "mpremote.upload",
+        "title": "MPRemote: Upload File to Device (cp)"
+      },
+      {
+        "command": "mpremote.mipinstall",
+        "title": "MPRemote: Install Package on Device (mip)"
+      },
+      {
+        "command": "mpremote.repl",
+        "title": "MPRemote: Enter REPL prompt (repl)"
+      },
+      {
+        "command": "mpremote.disconnect",
+        "title": "MPRemote: Disconnect from Current Device (disconnect)"
+      },
+      {
+        "command": "mpremote.run",
+        "title": "MPRemote: Run File Shown in the Active Editor (run)"
+      }
+    ]
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "node ./test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.73.0",
+    "@types/glob": "^8.0.0",
+    "@types/mocha": "^10.0.0",
+    "@types/node": "16.x",
+    "eslint": "^8.26.0",
+    "glob": "^8.0.3",
+    "mocha": "^10.1.0",
+    "typescript": "^4.8.4",
+    "@vscode/test-electron": "^2.2.0"
+  }
+}
