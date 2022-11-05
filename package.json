@@ -2,7 +2,7 @@
   "name": "mpremote",
   "displayName": "mpremote",
   "description": "Command palette access MicroPython mpremote",
-  "version": "0.0.1",
+  "version": "0.4.0",
   "engines": {
     "vscode": "^1.73.0"
   },
