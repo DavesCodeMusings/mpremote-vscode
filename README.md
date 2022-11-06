@@ -31,12 +31,20 @@ The mpremote module can be installed with pip, like this:
 `py -m pip install mpremote`
 
 ## About Version Numbers
-This extension's version numbers are tied to the versionof mpremote the
+This extension's version numbers are tied to the version of mpremote the
 extension was devloped and tested with. A final revision letter is used
 to track enhancements and bug fixes to the extension.
 
 For example:
 * 0.4.0 of the extension was developed for mpremote 0.4.0
-* 0.4.0a is a bug fix to the extension for mpremote 0.4.0
+* 0.4.0a is an enhancement to the extension for mpremote 0.4.0
 
 Hopefully the use of letters will help avoid confusion.
+
+## 0.4.0a Release Notes
+Detect COM ports as part of the extension's code rather than parsing
+output from mpremote's devs command.
+
+Auto-save current editor locally before calling mpremote run.
+
+Use active editor path for file uploads rather than an Open dialog.

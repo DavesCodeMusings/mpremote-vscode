@@ -1,4 +1,5 @@
 const vscode = require('vscode')
+const serialport = require('serialport')
 const childProcess = require('child_process')
 const path = require('path')
 
@@ -31,37 +32,34 @@ function activate(context) {
 	/**
 	 *  Return COM port of attached device. Prompt user to choose when multiple devices are found.
 	 */
-	async function getDevicePort() {
+	 async function getDevicePort() {
+		let comPortList = await serialport.SerialPort.list()
+
 		return new Promise((resolve, reject) => {
-			let port = ''
-			let deviceList = childProcess.execSync('py -m mpremote devs').toString().split('\r\n')
-
-			if (deviceList == null || deviceList.length == 0) {
-				reject('')
+			if (comPortList == null || comPortList.length == 0) {
+				resolve('auto')  // detection failed but maybe esptool can still figure it out
 			}
-
-			if (deviceList[deviceList.length - 1] == '') {
-				deviceList.pop()
-			}
-			console.debug('Attached devices:', deviceList)
-
-			if (deviceList.length == 1) {
-				port = deviceList[0].split(' ')[0]
-				console.debug(`Only one device attached: ${port}`)
-				resolve(port)
+			else if (comPortList.length == 1) {
+				resolve(comPortList[0].path)
 			}
 			else {
+  			let portSelectionList = comPortList.map(port => {
+					return {
+            label: port.path,
+						detail: port.friendlyName
+					}
+			  })
+				console.debug('Attached devices:', comPortList)
 				let options = {
 					title: 'Device Selection',
-					canSelectMany: false
+					canSelectMany: false,
+					matchOnDetail: true
 				}
-				vscode.window.showQuickPick(deviceList, options)
-					.then(selection => {
-						port = selection.split(' ')[0]
-						console.debug(`User selection is: ${port}`)
-						resolve(port)
-					})
-			}
+				vscode.window.showQuickPick(portSelectionList, options)
+				.then(choice => {
+  				resolve(choice.label)
+			  })
+			}	
 		})
 	}
 
@@ -79,25 +77,22 @@ function activate(context) {
 	context.subscriptions.push(listFilesCommand)
 
 	let uploadFileCommand = vscode.commands.registerCommand('mpremote.upload', async () => {
-		let port = await getDevicePort()
-		const options = {
-			canSelectMany: false,
-			title: 'Select File to Upload',
-			filters: {
-				'Python files': ['py'],
-				'All files': ['*']
+		if (vscode.window.activeTextEditor) {
+			if (vscode.window.activeTextEditor.document.isDirty) {
+				await vscode.window.activeTextEditor.document.save()
+			}
+			if (vscode.window.activeTextEditor.document.uri.fsPath) {
+				let port = await getDevicePort()
+				let localFile = vscode.window.activeTextEditor.document.uri.fsPath
+				let remoteFile = path.basename(localFile) 
+				console.debug('Local file:', localFile)
+				console.debug('Remote file:', remoteFile)
+				term.sendText(`py.exe -m mpremote connect ${port} fs cp ${localFile} ${remoteFile}`)
 			}
 		}
-		vscode.window.showOpenDialog(options)
-			.then(firmwareUri => {
-				if (firmwareUri && firmwareUri[0]) {
-					let localFile = firmwareUri[0].fsPath
-					let remoteFile = ':' + path.basename(firmwareUri[0].fsPath)
-					console.debug('Local file:', localFile)
-					console.debug('Remote file:', remoteFile)
-					term.sendText(`py.exe -m mpremote connect ${port} fs cp ${localFile} ${remoteFile}`)
-				}
-			})
+		else {
+			vscode.window.showErrorMessage('No active editor window. Nothing to upload.')
+		}
 	})
 
 	context.subscriptions.push(uploadFileCommand)
