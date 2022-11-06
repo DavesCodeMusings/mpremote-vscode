@@ -112,7 +112,7 @@ function activate(context) {
 	let runEditorFileOnDevice = vscode.commands.registerCommand('mpremote.run', async () => {
 		if (vscode.window.activeTextEditor) {
 			if (vscode.window.activeTextEditor.document.isDirty) {
-				vscode.window.showWarningMessage('Recent file changes have not been saved. Program output may be stale.')
+				await vscode.window.activeTextEditor.document.save()
 			}
 			if (vscode.window.activeTextEditor.document.uri.fsPath) {
 				let port = await getDevicePort()
