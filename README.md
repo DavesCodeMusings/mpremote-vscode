@@ -31,17 +31,21 @@ The mpremote module can be installed with pip, like this:
 `py -m pip install mpremote`
 
 ## About Version Numbers
-This extension's version numbers are tied to the version of mpremote the
-extension was devloped and tested with. A final revision letter is used
-to track enhancements and bug fixes to the extension.
+This extension's version numbers are tied to the major and minor version
+of mpremote. The first two numbers indicate the version of mpremote this
+extension was devloped and tested with. The final number is used to track
+enhancements and bug fixes to this extension.
 
 For example:
 * 0.4.0 of the extension was developed for mpremote 0.4.0
-* 0.4.0a is an enhancement to the extension for mpremote 0.4.0
+* 0.4.1 is an enhancement to the extension developed for mpremote 0.4.0
 
-Hopefully the use of letters will help avoid confusion.
+So, given MAJOR.MINOR.PATCH ...
+MAJOR = mpremote major
+MINOR = mpremote minor
+PATCH = extension version
 
-## 0.4.0a Release Notes
+## 0.4.1 Release Notes
 Detect COM ports as part of the extension's code rather than parsing
 output from mpremote's devs command.
 
