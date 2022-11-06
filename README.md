@@ -45,6 +45,9 @@ MAJOR = mpremote major
 MINOR = mpremote minor
 PATCH = extension version
 
+## 0.4.2 Release Notes
+Fixed upload file bug.
+
 ## 0.4.1 Release Notes
 Detect COM ports as part of the extension's code rather than parsing
 output from mpremote's devs command.
