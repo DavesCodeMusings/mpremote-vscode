@@ -2,9 +2,9 @@
   "name": "mpremote",
   "displayName": "MPRemote",
   "description": "Command palette access for MicroPython mpremote",
-  "icon": "images/micropython.png",
+  "icon": "images/snake.png",
   "publisher": "DavesCodeMusings",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "engines": {
     "vscode": "^1.73.0"
   },

@@ -45,6 +45,9 @@ MAJOR = mpremote major
 MINOR = mpremote minor
 PATCH = extension version
 
+## 0.4.3  Release Notes
+Logo change.
+
 ## 0.4.2 Release Notes
 Fixed upload file bug.
 
