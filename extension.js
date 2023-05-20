@@ -95,7 +95,7 @@ function activate(context) {
 				let remoteFile = path.basename(localFile) 
 				console.debug('Local file:', localFile)
 				console.debug('Remote file:', remoteFile)
-				term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs cp ${localFile} :${remoteFile}`)
+				term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs cp '${localFile}' ':${remoteFile}'`)
 			}
 		}
 		else {
