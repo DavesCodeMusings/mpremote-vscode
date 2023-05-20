@@ -45,6 +45,10 @@ MAJOR = mpremote major
 MINOR = mpremote minor
 PATCH = extension version
 
+## 1.20.0 Release Notes
+Fix to use quotes around file paths so spaces don't cause problems.
+Bump version to match compatible mpremote version.
+
 ## 0.4.4 Release Notes
 Fix to use py.exe only on Windows and python on all other OS.
 
