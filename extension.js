@@ -119,7 +119,7 @@ function activate(context) {
 			}
 			if (vscode.window.activeTextEditor.document.uri.fsPath) {
 				let port = await getDevicePort()
-				term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} run ${vscode.window.activeTextEditor.document.uri.fsPath}`)
+				term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} run '${vscode.window.activeTextEditor.document.uri.fsPath}'`)
 			}
 		}
 		else {
