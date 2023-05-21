@@ -41,8 +41,8 @@ For example:
 * 0.4.1 is an enhancement to the extension developed for mpremote 0.4.0
 
 So, given MAJOR.MINOR.PATCH ...
-MAJOR = mpremote major
-MINOR = mpremote minor
+MAJOR = mpremote major,
+MINOR = mpremote minor,
 PATCH = extension version
 
 ## 1.20.0 Release Notes
