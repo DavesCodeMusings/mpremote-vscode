@@ -45,6 +45,9 @@ MAJOR = mpremote major,
 MINOR = mpremote minor,
 PATCH = extension version
 
+## 1.20.1 Release Notes
+Fix problems when there are unsaved changes in editor.
+
 ## 1.20.0 Release Notes
 Fix to use quotes around file paths so spaces don't cause problems.
 Bump version to match compatible mpremote version.
