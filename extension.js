@@ -16,7 +16,7 @@ function activate(context) {
 	}
 	console.debug('Using Python executable:', PYTHON_BIN)
 		
-	// Python and the esptool module must be installed for this to work.
+	// Python and the mpremote module must be installed for this to work.
 	try {
 		let pythonVersion = childProcess.execSync(`${PYTHON_BIN} --version`).toString().split('\r\n')[0].split(' ')[1]
 		console.debug('Python version:', pythonVersion)
