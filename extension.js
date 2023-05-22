@@ -85,11 +85,14 @@ function activate(context) {
 	context.subscriptions.push(listFilesCommand)
 
 	let uploadFileCommand = vscode.commands.registerCommand('mpremote.upload', async () => {
-		if (vscode.window.activeTextEditor) {
-			if (vscode.window.activeTextEditor.document.isDirty) {
-				await vscode.window.activeTextEditor.document.save()
+		if (!vscode.window.activeTextEditor) {
+			vscode.window.showErrorMessage('No active editor window. Nothing to upload.')
+		}
+		else {
+			if (vscode.window.activeTextEditor.document.isUntitled || vscode.window.activeTextEditor.document.isDirty) {
+				vscode.window.showErrorMessage('You must save changes locally before uploading.')
 			}
-			if (vscode.window.activeTextEditor.document.uri.fsPath) {
+			else {
 				let port = await getDevicePort()
 				let localFile = vscode.window.activeTextEditor.document.uri.fsPath
 				let remoteFile = path.basename(localFile) 
@@ -97,9 +100,6 @@ function activate(context) {
 				console.debug('Remote file:', remoteFile)
 				term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs cp '${localFile}' ':${remoteFile}'`)
 			}
-		}
-		else {
-			vscode.window.showErrorMessage('No active editor window. Nothing to upload.')
 		}
 	})
 
@@ -118,7 +118,7 @@ function activate(context) {
 		}
 		else {
 			if (vscode.window.activeTextEditor.document.isUntitled || vscode.window.activeTextEditor.document.isDirty) {
-				vscode.window.showErrorMessage('You must save changes before running.')
+				vscode.window.showErrorMessage('You must save changes locally before running.')
 			}
 			else {
 				let port = await getDevicePort()
