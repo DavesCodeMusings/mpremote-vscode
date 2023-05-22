@@ -113,17 +113,17 @@ function activate(context) {
 	context.subscriptions.push(replCommand)
 
 	let runEditorFileOnDevice = vscode.commands.registerCommand('mpremote.run', async () => {
-		if (vscode.window.activeTextEditor) {
-			if (vscode.window.activeTextEditor.document.isDirty) {
-				await vscode.window.activeTextEditor.document.save()
+		if (!vscode.window.activeTextEditor) {
+			vscode.window.showErrorMessage('No active editor window. Nothing to run.')
+		}
+		else {
+			if (vscode.window.activeTextEditor.document.isUntitled || vscode.window.activeTextEditor.document.isDirty) {
+				vscode.window.showErrorMessage('You must save changes before running.')
 			}
-			if (vscode.window.activeTextEditor.document.uri.fsPath) {
+			else {
 				let port = await getDevicePort()
 				term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} run '${vscode.window.activeTextEditor.document.uri.fsPath}'`)
 			}
-		}
-		else {
-			vscode.window.showErrorMessage('No active editor window. Nothing to run.')
 		}
 	})
 
