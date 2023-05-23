@@ -198,6 +198,43 @@ function activate(context) {
 
 	context.subscriptions.push(removeFilesCommand)
 
+	let downloadFileCommand = vscode.commands.registerCommand('mpremote.download', async () => {
+		let port = await getDevicePort()
+		let cwd = remoteWorkingDir[port] || remoteWorkingDir['default']
+		console.debug('cwd:', cwd)
+
+		let dirEntries = await getRemoteDirEntries(port, cwd, STAT_MASK_FILE)
+		const options = {
+			title: 'Choose file to download',
+			canSelectMany: false,
+			matchOnDetail: true
+		}
+		vscode.window.showQuickPick(dirEntries, options)
+		.then(choice => {
+			console.debug('User selection:', choice)
+			if (choice !== undefined) {
+				const options = {
+					title: 'Choose local destination',
+					canSelectMany: false,
+					openLabel: 'Select',
+					canSelectFiles: false,
+					canSelectFolders: true
+				}
+				vscode.window.showOpenDialog(options)
+				.then(fileUri => {
+					if (fileUri && fileUri[0]) {
+						let localDir = fileUri[0].fsPath
+						let localFile = path.join(localDir, choice)
+						let remoteFile = join(cwd, choice)
+						term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs cp ':${remoteFile}' '${localFile}'`)
+					}
+				})
+			}
+		})
+	})
+
+	context.subscriptions.push(downloadFileCommand)
+
 	let uploadFileCommand = vscode.commands.registerCommand('mpremote.upload', async () => {
 		if (!vscode.window.activeTextEditor) {
 			vscode.window.showErrorMessage('No active editor window. Nothing to upload.')

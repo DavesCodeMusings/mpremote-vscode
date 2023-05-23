@@ -18,6 +18,7 @@
   "activationEvents": [
     "onCommand:mpremote.chdir",
     "onCommand:mpremote.devs",
+    "onCommand:mpremote.download",
     "onCommand:mpremote.ls",
     "onCommand:mpremote.upload",
     "onCommand:mpremote.repl",
@@ -36,6 +37,10 @@
       {
         "command": "mpremote.devs",
         "title": "MPRemote: Scan for Devices (devs)"
+      },
+      {
+        "command": "mpremote.download",
+        "title": "MPRemote: Download File to Local Directory"
       },
       {
         "command": "mpremote.ls",
