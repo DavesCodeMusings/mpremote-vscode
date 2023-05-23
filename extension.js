@@ -40,7 +40,7 @@ function activate(context) {
 	/**
 	 *  Return COM port of attached device. Prompt user to choose when multiple devices are found.
 	 */
-	 async function getDevicePort() {
+	async function getDevicePort() {
 		let comPortList = await serialport.SerialPort.list()
 
 		return new Promise((resolve, reject) => {
@@ -71,6 +71,35 @@ function activate(context) {
 		})
 	}
 
+	/**
+	 * Return a JSON formatted list of entries in remote (device) directory.
+	 */
+	async function getRemoteDirEntries(port, dir) {
+		console.debug('Scanning directory', dir, 'for device on', port)
+		return new Promise((resolve, reject) => {
+			let listDirCmd = `${PYTHON_BIN} -m mpremote connect ${port} exec "from os import listdir ; print(listdir('${dir}'))"`
+			console.debug(`Running ${listDirCmd}`)
+			childProcess.exec(listDirCmd, (err, output) => {
+				if (err) {
+					console.error(err)
+				}
+				else {
+					console.debug('Files found:\n', output)
+					try {
+						let dirEntries = JSON.parse(`${output.replace(/'/g, '"')}`)  // Python uses single quote, JSON parser expects double quote.
+						resolve(dirEntries)
+					}
+					catch (ex) {
+						console.error('Parsing Python listdir() output failed.', ex)
+						reject('Parsing directory entries failed.')
+					}
+				}
+			})
+		})
+  }
+
+  // Command Palette definitions
+
 	let devsCommand = vscode.commands.registerCommand('mpremote.devs', () => {
 		term.sendText(`${PYTHON_BIN} -m mpremote devs`)
 	})
@@ -86,37 +115,23 @@ function activate(context) {
 
 	let removeFilesCommand = vscode.commands.registerCommand('mpremote.rm', async () => {
 		let port = await getDevicePort()
-		let files = []
-		console.debug('Scanning for files for device on', port)
-		let listDirCmd = `${PYTHON_BIN} -m mpremote connect ${port} exec "from os import listdir ; print(listdir())"`
-		console.debug(`Running ${listDirCmd}`)
-		childProcess.exec(listDirCmd, (err, output) => {
-			if (err) {
-				console.error(err)
-			}
-			else {
-        console.debug('Files found:\n', output)
-				try {
-   				files = JSON.parse(`${output.replace(/'/g, '"')}`)  // Python uses single quote, JSON parser expects double quote.
-				}
-				catch (ex) {
-					console.error('Parsing filenames failed', ex)
-				}
-				console.debug('Parsed:', files)
-				let options = {
-					title: `Choose file to remove from device at ${port}`,
-					canSelectMany: false,
-					matchOnDetail: true
-				}
-				vscode.window.showQuickPick(files, options)
-				.then(choice => {
-  				console.debug(choice)
-					vscode.window.showInformationMessage(`Delete ${choice}?`, "OK", "Cancel")
-          .then(confirmation => {
-            if (confirmation === "OK") {
-							term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs rm ${choice}`)
-            }
-          })
+		let dirEntries = await getRemoteDirEntries(port, '/')
+		console.log('Dir entries:', dirEntries)
+
+		let options = {
+			title: `Choose file to remove from device at ${port}`,
+			canSelectMany: false,
+			matchOnDetail: true
+		}
+		vscode.window.showQuickPick(dirEntries, options)
+		.then(choice => {
+			console.debug('User selection:', choice)
+			if (choice !== undefined) {  // undefined when user aborts or selection times out
+				vscode.window.showInformationMessage(`Delete ${choice}?`, "OK", "Cancel")
+				.then(confirmation => {
+					if (confirmation === "OK") {
+						term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs rm ${choice}`)
+					}
 				})
 			}
 		})
