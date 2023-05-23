@@ -84,6 +84,46 @@ function activate(context) {
 
 	context.subscriptions.push(listFilesCommand)
 
+	let removeFilesCommand = vscode.commands.registerCommand('mpremote.rm', async () => {
+		let port = await getDevicePort()
+		let files = []
+		console.debug('Scanning for files for device on', port)
+		let listDirCmd = `${PYTHON_BIN} -m mpremote connect ${port} exec "from os import listdir ; print(listdir())"`
+		console.debug(`Running ${listDirCmd}`)
+		childProcess.exec(listDirCmd, (err, output) => {
+			if (err) {
+				console.error(err)
+			}
+			else {
+        console.debug('Files found:\n', output)
+				try {
+   				files = JSON.parse(`${output.replace(/'/g, '"')}`)  // Python uses single quote, JSON parser expects double quote.
+				}
+				catch (ex) {
+					console.error('Parsing filenames failed', ex)
+				}
+				console.debug('Parsed:', files)
+				let options = {
+					title: `Choose file to remove from device at ${port}`,
+					canSelectMany: false,
+					matchOnDetail: true
+				}
+				vscode.window.showQuickPick(files, options)
+				.then(choice => {
+  				console.debug(choice)
+					vscode.window.showInformationMessage(`Delete ${choice}?`, "OK", "Cancel")
+          .then(confirmation => {
+            if (confirmation === "OK") {
+							term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs rm ${choice}`)
+            }
+          })
+				})
+			}
+		})
+	})
+
+	context.subscriptions.push(removeFilesCommand)
+
 	let uploadFileCommand = vscode.commands.registerCommand('mpremote.upload', async () => {
 		if (!vscode.window.activeTextEditor) {
 			vscode.window.showErrorMessage('No active editor window. Nothing to upload.')
