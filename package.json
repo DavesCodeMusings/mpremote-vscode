@@ -16,6 +16,7 @@
     "Other"
   ],
   "activationEvents": [
+    "onCommand:mpremote.chdir",
     "onCommand:mpremote.devs",
     "onCommand:mpremote.ls",
     "onCommand:mpremote.upload",
@@ -28,6 +29,10 @@
   "main": "./extension.js",
   "contributes": {
     "commands": [
+      {
+        "command": "mpremote.chdir",
+        "title": "MPRemote: Change Dir on Device (chdir)"
+      },
       {
         "command": "mpremote.devs",
         "title": "MPRemote: Scan for Devices (devs)"

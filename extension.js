@@ -3,6 +3,10 @@ const serialport = require('serialport')
 const childProcess = require('child_process')
 const path = require('path')
 
+const STAT_MASK_DIR = 0x4000
+const STAT_MASK_FILE = 0x8000
+const STAT_MASK_ALL = 0xFFFF
+
 /**
  * Check for Python prerequisites and register commands.
  * @param {vscode.ExtensionContext} context
@@ -36,6 +40,27 @@ function activate(context) {
 	// All commands are run in the integrated terminal so output is visible.
 	const term = vscode.window.createTerminal('mpremote')
 	term.show(false)  // using false here lets the terminal take focus on startup
+
+	// Track the remote device's working directory for devices. Used by commands like cp, ls, and rm.
+  let remoteWorkingDir = {}
+	remoteWorkingDir['default'] = '/'
+
+	/**
+	 * Join file path components using forward slash separator. Because path.join() on Windows will
+	 * try to use a backslash.
+	 */
+  function join() {
+		let path = ''
+		for (let i=0; i<arguments.length; i++) {
+			if (path.endsWith('/') || arguments[i].startsWith('/')) {
+        path += arguments[i]        
+			}
+			else {
+				path += '/' + arguments[i]
+			}
+		}
+		return path
+	}
 
 	/**
 	 *  Return COM port of attached device. Prompt user to choose when multiple devices are found.
@@ -74,10 +99,12 @@ function activate(context) {
 	/**
 	 * Return a JSON formatted list of entries in remote (device) directory.
 	 */
-	async function getRemoteDirEntries(port, dir) {
-		console.debug('Scanning directory', dir, 'for device on', port)
+	async function getRemoteDirEntries(port, dir, mask=STAT_MASK_ALL) {
+		let cwd = dir || remoteWorkingDir[port] || remoteWorkingDir['default']
+		console.debug('Gathering directory entries for', cwd, 'on device at', port)
 		return new Promise((resolve, reject) => {
-			let listDirCmd = `${PYTHON_BIN} -m mpremote connect ${port} exec "from os import listdir ; print(listdir('${dir}'))"`
+			let oneLiner = `from os import listdir, stat ; print([entry for entry in listdir('${cwd}') if stat('${cwd}' + '/' + entry)[0] & ${mask} != 0])`
+			let listDirCmd = `${PYTHON_BIN} -m mpremote connect ${port} exec "${oneLiner}"`
 			console.debug(`Running ${listDirCmd}`)
 			childProcess.exec(listDirCmd, (err, output) => {
 				if (err) {
@@ -100,6 +127,37 @@ function activate(context) {
 
   // Command Palette definitions
 
+  let chdirCommand = vscode.commands.registerCommand('mpremote.chdir', async () => {
+		let port = await getDevicePort()
+		let cwd = remoteWorkingDir[port] || remoteWorkingDir['default']
+		console.debug('cwd:', cwd)
+		let subdirs = await getRemoteDirEntries(port, cwd, STAT_MASK_DIR)
+		if (cwd != '/') {
+  		subdirs.unshift('..')
+		}
+		let options = {
+			title: `Choose a directory on device at ${port}`,
+			canSelectMany: false,
+			matchOnDetail: true
+		}
+		vscode.window.showQuickPick(subdirs, options)
+		.then(choice => {
+			console.debug('User selection:', choice)
+			if (choice !== undefined) {  // undefined when user aborts or selection times out
+				if (choice == '..') {
+					remoteWorkingDir[port] = cwd.substring(0, cwd.lastIndexOf('/'))
+				}
+				else {
+				  remoteWorkingDir[port] = join(cwd, choice)
+				}
+				console.debug('New remote working directory:', remoteWorkingDir[port])
+				term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs ls ${remoteWorkingDir[port]}`)
+			}
+		})
+	})
+
+	context.subscriptions.push(chdirCommand)
+
 	let devsCommand = vscode.commands.registerCommand('mpremote.devs', () => {
 		term.sendText(`${PYTHON_BIN} -m mpremote devs`)
 	})
@@ -108,16 +166,17 @@ function activate(context) {
 
 	let listFilesCommand = vscode.commands.registerCommand('mpremote.ls', async () => {
 		let port = await getDevicePort()
-		term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs ls`)
+		let cwd = remoteWorkingDir[port] || remoteWorkingDir['default']
+		term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs ls ${cwd}`)
 	})
 
 	context.subscriptions.push(listFilesCommand)
 
 	let removeFilesCommand = vscode.commands.registerCommand('mpremote.rm', async () => {
 		let port = await getDevicePort()
-		let dirEntries = await getRemoteDirEntries(port, '/')
-		console.log('Dir entries:', dirEntries)
-
+		let cwd = remoteWorkingDir[port] || remoteWorkingDir['default']
+		console.debug('cwd:', cwd)
+		let dirEntries = await getRemoteDirEntries(port, cwd, STAT_MASK_FILE)
 		let options = {
 			title: `Choose file to remove from device at ${port}`,
 			canSelectMany: false,
@@ -150,8 +209,12 @@ function activate(context) {
 			else {
 				let port = await getDevicePort()
 				let localFile = vscode.window.activeTextEditor.document.uri.fsPath
-				let remoteFile = path.basename(localFile) 
 				console.debug('Local file:', localFile)
+				let cwd = remoteWorkingDir[port] || remoteWorkingDir['default']
+				if (cwd.endsWith('/') == false) {
+					cwd += '/'
+				}
+				let remoteFile = cwd + path.basename(localFile)
 				console.debug('Remote file:', remoteFile)
 				term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs cp '${localFile}' ':${remoteFile}'`)
 			}
