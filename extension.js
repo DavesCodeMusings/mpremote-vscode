@@ -86,7 +86,7 @@ function activate(context) {
 			  })
 				console.debug('Attached devices:', comPortList)
 				let options = {
-					title: 'Device Selection',
+					title: 'Choose a device',
 					canSelectMany: false,
 					matchOnDetail: true
 				}
@@ -141,7 +141,7 @@ function activate(context) {
 		console.debug('cwd:', cwd)
 		let dirEntries = await getRemoteDirEntries(port, cwd, STAT_MASK_FILE)
 		let options = {
-			title: `Choose file to display from ${port}:${cwd}`,
+			title: `Choose a file to display from ${port}:${cwd}`,
 			canSelectMany: false,
 			matchOnDetail: true
 		}
@@ -170,7 +170,7 @@ function activate(context) {
   		subdirs.unshift('..')
 		}
 		let options = {
-			title: `Choose a directory on device at ${port}`,
+			title: `Choose the working directory for ${port}:${cwd}`,
 			canSelectMany: false,
 			matchOnDetail: true
 		}
@@ -251,7 +251,7 @@ function activate(context) {
 		console.debug('cwd:', cwd)
 		let dirEntries = await getRemoteDirEntries(port, cwd, STAT_MASK_FILE)
 		let options = {
-			title: `Choose file to remove from device at ${port}`,
+			title: `Choose file to remove from ${port}:${cwd}`,
 			canSelectMany: false,
 			matchOnDetail: true
 		}
@@ -284,7 +284,7 @@ function activate(context) {
 
 		let dirEntries = await getRemoteDirEntries(port, cwd, STAT_MASK_FILE)
 		const options = {
-			title: 'Choose file to download',
+			title: `Choose file to download from ${port}:${cwd}`,
 			canSelectMany: false,
 			matchOnDetail: true
 		}
@@ -295,7 +295,7 @@ function activate(context) {
 				const options = {
 					title: 'Choose local destination',
 					canSelectMany: false,
-					openLabel: 'Select',
+					openLabel: 'Select Folder',
 					canSelectFiles: false,
 					canSelectFolders: true
 				}
@@ -351,7 +351,7 @@ function activate(context) {
 		let port = await getDevicePort()
 		let cwd = remoteWorkingDir[port] || remoteWorkingDir['default']
 		let options = {
-			title: "New Directory Name"
+			title: "Directory to create under ${port}:${cwd}"
 		}
 		let dir = await vscode.window.showInputBox(options)
 		let dirpath = join(cwd, dir)
@@ -399,7 +399,7 @@ function activate(context) {
 	let mipInstallCommand = vscode.commands.registerCommand('mpremote.mipinstall', async () => {
 		let port = await getDevicePort()
 		let options = {
-			title: "Package Name"
+			title: "Enter a package name"
 		}
 		let pkg = await vscode.window.showInputBox(options)
 		term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} mip install ${pkg}`)

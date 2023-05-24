@@ -35,35 +35,35 @@
     "commands": [
       {
         "command": "mpremote.cat",
-        "title": "MPRemote: Show File Contents (cat)"
+        "title": "MPRemote: Show file contents (cat)"
       },
       {
         "command": "mpremote.chdir",
-        "title": "MPRemote: Change Dir on Device (chdir)"
+        "title": "MPRemote: Change remote working directory (chdir)"
       },
       {
         "command": "mpremote.devs",
-        "title": "MPRemote: Scan for Devices (devs)"
+        "title": "MPRemote: Scan for attached devices (devs)"
       },
       {
         "command": "mpremote.download",
-        "title": "MPRemote: Download File to Local Directory"
+        "title": "MPRemote: Download file from remote filesystem"
       },
       {
         "command": "mpremote.ls",
-        "title": "MPRemote: List files (ls)"
+        "title": "MPRemote: List files on remote filesystem (ls)"
       },
       {
         "command": "mpremote.mkdir",
-        "title": "MPRemote: Make Directory on Device (mkdir)"
+        "title": "MPRemote: Make new directory (mkdir)"
       },
       {
         "command": "mpremote.upload",
-        "title": "MPRemote: Upload File to Device (cp)"
+        "title": "MPRemote: Upload file to remote filesystem (cp)"
       },
       {
         "command": "mpremote.mipinstall",
-        "title": "MPRemote: Install Package on Device (mip)"
+        "title": "MPRemote: Install package on device (mip)"
       },
       {
         "command": "mpremote.repl",
@@ -71,19 +71,19 @@
       },
       {
         "command": "mpremote.disconnect",
-        "title": "MPRemote: Disconnect from Current Device (disconnect)"
+        "title": "MPRemote: Disconnect from device (disconnect)"
       },
       {
         "command": "mpremote.rm",
-        "title": "MPRemote: Remove File from Device (rm)"
+        "title": "MPRemote: Remove file from remote filesystem (rm)"
       },
       {
         "command": "mpremote.rmdir",
-        "title": "MPRemote: Remove Directory from Device (rmdir)"
+        "title": "MPRemote: Remove directory from remote filesystem (rmdir)"
       },
       {
         "command": "mpremote.run",
-        "title": "MPRemote: Run File Shown in the Active Editor (run)"
+        "title": "MPRemote: Run file shown in the active editor (run)"
       }
     ]
   },
