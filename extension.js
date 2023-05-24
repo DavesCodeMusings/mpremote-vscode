@@ -209,6 +209,38 @@ function activate(context) {
 
 	context.subscriptions.push(listFilesCommand)
 
+
+	/*
+	 *  Gather directory names from the current remote working directory, present the choices via
+	 *  a selection list and delete the chosen file via MPRemote's rmdir command after confirmation.
+	 */
+	let removeDirCommand = vscode.commands.registerCommand('mpremote.rmdir', async () => {
+		let port = await getDevicePort()
+		let cwd = remoteWorkingDir[port] || remoteWorkingDir['default']
+		console.debug('cwd:', cwd)
+		let dirEntries = await getRemoteDirEntries(port, cwd, STAT_MASK_DIR)
+		let options = {
+			title: `Choose directory to remove from ${port}:${cwd}`,
+			canSelectMany: false,
+			matchOnDetail: true
+		}
+		vscode.window.showQuickPick(dirEntries, options)
+		.then(dirname => {
+			console.debug('User selection:', dirname)
+			if (dirname !== undefined) {  // undefined when user aborts or selection times out
+				let dirpath = join(cwd, dirname)
+				vscode.window.showInformationMessage(`Delete ${dirpath}?`, "OK", "Cancel")
+				.then(confirmation => {
+					if (confirmation === "OK") {
+						term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs rm ${dirpath}`)
+					}
+				})
+			}
+		})
+	})
+
+	context.subscriptions.push(removeDirCommand)
+
 	/*
 	 *  Gather file names from the current remote working directory, present the choices via
 	 *  a selection list and delete the chosen file via MPRemote's rm command after confirmation.

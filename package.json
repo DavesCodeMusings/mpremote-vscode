@@ -27,6 +27,7 @@
     "onCommand:mpremote.mipinstall",
     "onCommand:mpremote.disconnect",
     "onCommand:mpremote.rm",
+    "onCommand:mpremote.rmdir",
     "onCommand:mpremote.run"
   ],
   "main": "./extension.js",
@@ -75,6 +76,10 @@
       {
         "command": "mpremote.rm",
         "title": "MPRemote: Remove File from Device (rm)"
+      },
+      {
+        "command": "mpremote.rmdir",
+        "title": "MPRemote: Remove Directory from Device (rmdir)"
       },
       {
         "command": "mpremote.run",
