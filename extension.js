@@ -183,13 +183,14 @@ function activate(context) {
 			matchOnDetail: true
 		}
 		vscode.window.showQuickPick(dirEntries, options)
-		.then(choice => {
-			console.debug('User selection:', choice)
-			if (choice !== undefined) {  // undefined when user aborts or selection times out
-				vscode.window.showInformationMessage(`Delete ${choice}?`, "OK", "Cancel")
+		.then(filename => {
+			console.debug('User selection:', filename)
+			if (filename !== undefined) {  // undefined when user aborts or selection times out
+				let filepath = join(cwd, filename)
+				vscode.window.showInformationMessage(`Delete ${filepath}?`, "OK", "Cancel")
 				.then(confirmation => {
 					if (confirmation === "OK") {
-						term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs rm ${choice}`)
+						term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs rm ${filepath}`)
 					}
 				})
 			}
@@ -259,6 +260,19 @@ function activate(context) {
 	})
 
 	context.subscriptions.push(uploadFileCommand)
+
+	let mkdirCommand = vscode.commands.registerCommand('mpremote.mkdir', async () => {
+		let port = await getDevicePort()
+		let cwd = remoteWorkingDir[port] || remoteWorkingDir['default']
+		let options = {
+			title: "New Directory Name"
+		}
+		let dir = await vscode.window.showInputBox(options)
+		let dirpath = join(cwd, dir)
+		term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs mkdir ${dirpath}`)
+	})
+
+	context.subscriptions.push(mkdirCommand)
 
 	let replCommand = vscode.commands.registerCommand('mpremote.repl', async () => {
 		let port = await getDevicePort()

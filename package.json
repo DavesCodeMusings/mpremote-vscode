@@ -20,6 +20,7 @@
     "onCommand:mpremote.devs",
     "onCommand:mpremote.download",
     "onCommand:mpremote.ls",
+    "onCommand:mpremote.mkdir",
     "onCommand:mpremote.upload",
     "onCommand:mpremote.repl",
     "onCommand:mpremote.mipinstall",
@@ -45,6 +46,10 @@
       {
         "command": "mpremote.ls",
         "title": "MPRemote: List files (ls)"
+      },
+      {
+        "command": "mpremote.mkdir",
+        "title": "MPRemote: Make Directory on Device (mkdir)"
       },
       {
         "command": "mpremote.upload",
