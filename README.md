@@ -1,7 +1,5 @@
 # mpremote-vscode
-Command palette access to mpremote Python module. For a detailed
-tutorial on all the features, see the
-[project wiki](https://github.com/DavesCodeMusings/mpremote-vscode/wiki).
+Command palette access to mpremote Python module.
 
 ## Features
 The goal of this extension is giving easy access to some of mpremote's
