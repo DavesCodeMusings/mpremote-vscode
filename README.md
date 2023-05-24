@@ -46,6 +46,9 @@ MAJOR = mpremote major,
 MINOR = mpremote minor,
 PATCH = extension version
 
+## 1.20.2 Release Notes
+New commands. Better handling of remote subdirectories.
+
 ## 1.20.1 Release Notes
 Fix problems when there are unsaved changes in editor.
 
