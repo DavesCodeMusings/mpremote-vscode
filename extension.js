@@ -97,7 +97,8 @@ function activate(context) {
 	}
 
 	/**
-	 * Return a JSON formatted list of entries in remote (device) directory.
+	 * Return a JSON formatted list of entries in remote (device) directory. Can be
+	 * limited to just directories (STAT_MASK_DIR) or just files (STAT_MASK_FILES)
 	 */
 	async function getRemoteDirEntries(port, dir, mask=STAT_MASK_ALL) {
 		let cwd = dir || remoteWorkingDir[port] || remoteWorkingDir['default']
@@ -125,8 +126,12 @@ function activate(context) {
 		})
   }
 
-  // Command Palette definitions
+  /* Command Palette definitions follow... */
 
+	/*
+	 *  Change the remote parent path used for file operations like cp, ls, rm, etc.
+	 *  The parent path is stored per serial port in case there are multiple devices.
+	 */
   let chdirCommand = vscode.commands.registerCommand('mpremote.chdir', async () => {
 		let port = await getDevicePort()
 		let cwd = remoteWorkingDir[port] || remoteWorkingDir['default']
@@ -158,6 +163,9 @@ function activate(context) {
 
 	context.subscriptions.push(chdirCommand)
 
+	/*
+	 *  Tell MPRemote to scan the available serial ports and identify the devices attached.
+	 */
 	let devsCommand = vscode.commands.registerCommand('mpremote.devs', () => {
 		term.sendText(`${PYTHON_BIN} -m mpremote devs`)
 	})
@@ -172,6 +180,10 @@ function activate(context) {
 
 	context.subscriptions.push(listFilesCommand)
 
+	/*
+	 *  Gather file names from the current remote working directory, present the choices via
+	 *  a selection list and delete the chosen file via MPRemote's rm command after confirmation.
+	 */
 	let removeFilesCommand = vscode.commands.registerCommand('mpremote.rm', async () => {
 		let port = await getDevicePort()
 		let cwd = remoteWorkingDir[port] || remoteWorkingDir['default']
@@ -199,6 +211,11 @@ function activate(context) {
 
 	context.subscriptions.push(removeFilesCommand)
 
+	/*
+	 *  Gather file names from the current remote working directory, present the choices via
+	 *  a selection list. Present a directory choser dialog to get the local destination.
+	 *  Use MPRemote's cp command to copy the selected file. 
+	 */
 	let downloadFileCommand = vscode.commands.registerCommand('mpremote.download', async () => {
 		let port = await getDevicePort()
 		let cwd = remoteWorkingDir[port] || remoteWorkingDir['default']
@@ -236,6 +253,10 @@ function activate(context) {
 
 	context.subscriptions.push(downloadFileCommand)
 
+	/*
+	 *  Present a file chooser dialog to get the local file. Use MPRemote's cp command
+	 *  to copy the local file to the current working directory of the microcontroller. 
+	 */
 	let uploadFileCommand = vscode.commands.registerCommand('mpremote.upload', async () => {
 		if (!vscode.window.activeTextEditor) {
 			vscode.window.showErrorMessage('No active editor window. Nothing to upload.')
@@ -261,6 +282,10 @@ function activate(context) {
 
 	context.subscriptions.push(uploadFileCommand)
 
+	/*
+	 *  Prompt for a directory name. Use MPRemote's mkdir to create the new directory
+	 *  under the the present working directory on the microcontroller.
+	 */
 	let mkdirCommand = vscode.commands.registerCommand('mpremote.mkdir', async () => {
 		let port = await getDevicePort()
 		let cwd = remoteWorkingDir[port] || remoteWorkingDir['default']
@@ -274,6 +299,9 @@ function activate(context) {
 
 	context.subscriptions.push(mkdirCommand)
 
+	/*
+	 *  Start a REPL prompt inside the terminal window.
+	 */
 	let replCommand = vscode.commands.registerCommand('mpremote.repl', async () => {
 		let port = await getDevicePort()
 		term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} repl`)
@@ -281,6 +309,10 @@ function activate(context) {
 
 	context.subscriptions.push(replCommand)
 
+	/*
+	 *  Use MPRemote's run command to execute the file whose path is determined by the
+	 *  active editor window, giving the appearance of running the code on the screen.
+	 */
 	let runEditorFileOnDevice = vscode.commands.registerCommand('mpremote.run', async () => {
 		if (!vscode.window.activeTextEditor) {
 			vscode.window.showErrorMessage('No active editor window. Nothing to run.')
@@ -298,6 +330,11 @@ function activate(context) {
 
 	context.subscriptions.push(runEditorFileOnDevice)
 
+	/*
+	 *  Prompt for a package name and pass it to MPRemote's mip command to install.
+	 *  I think the mip acronym should be "magically install packages,"" but sadly
+	 *  they didn't ask me.
+	 */
 	let mipInstallCommand = vscode.commands.registerCommand('mpremote.mipinstall', async () => {
 		let port = await getDevicePort()
 		let options = {
@@ -309,6 +346,9 @@ function activate(context) {
 
 	context.subscriptions.push(mipInstallCommand)
 
+	/*
+	 *  Disconnect from the device. Mostly included for completeness.
+	 */
 	let disconnectCommand = vscode.commands.registerCommand('mpremote.disconnect', () => {
 		term.sendText(`${PYTHON_BIN} -m mpremote disconnect`)
 	})
