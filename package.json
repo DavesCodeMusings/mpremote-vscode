@@ -16,6 +16,7 @@
     "Other"
   ],
   "activationEvents": [
+    "onCommand:mpremote.cat",
     "onCommand:mpremote.chdir",
     "onCommand:mpremote.devs",
     "onCommand:mpremote.download",
@@ -31,6 +32,10 @@
   "main": "./extension.js",
   "contributes": {
     "commands": [
+      {
+        "command": "mpremote.cat",
+        "title": "MPRemote: Show File Contents (cat)"
+      },
       {
         "command": "mpremote.chdir",
         "title": "MPRemote: Change Dir on Device (chdir)"

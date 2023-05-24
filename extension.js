@@ -45,6 +45,8 @@ function activate(context) {
   let remoteWorkingDir = {}
 	remoteWorkingDir['default'] = '/'
 
+	/* Utility functions */
+
 	/**
 	 * Join file path components using forward slash separator. Because path.join() on Windows will
 	 * try to use a backslash.
@@ -127,6 +129,33 @@ function activate(context) {
   }
 
   /* Command Palette definitions follow... */
+
+	/*
+	 *  Gather file names from the current remote working directory, present the choices
+	 *  via a selection list. Display the contents of the chosen file in the terminal
+	 *  window using MPRemote's cat command.
+	 */
+	let catFileCommand = vscode.commands.registerCommand('mpremote.cat', async () => {
+		let port = await getDevicePort()
+		let cwd = remoteWorkingDir[port] || remoteWorkingDir['default']
+		console.debug('cwd:', cwd)
+		let dirEntries = await getRemoteDirEntries(port, cwd, STAT_MASK_FILE)
+		let options = {
+			title: `Choose file to display from ${port}:${cwd}`,
+			canSelectMany: false,
+			matchOnDetail: true
+		}
+		vscode.window.showQuickPick(dirEntries, options)
+		.then(filename => {
+			console.debug('User selection:', filename)
+			if (filename !== undefined) {  // undefined when user aborts or selection times out
+				let filepath = join(cwd, filename)
+				term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs cat ${filepath}`)
+			}
+		})
+	})
+
+	context.subscriptions.push(catFileCommand)
 
 	/*
 	 *  Change the remote parent path used for file operations like cp, ls, rm, etc.
