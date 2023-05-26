@@ -23,7 +23,7 @@ function activate(context) {
 		PYTHON_BIN = 'python'
 	}
 	console.debug('Using Python executable:', PYTHON_BIN)
-		
+
 	// Python and the mpremote module must be installed for this to work.
 	try {
 		let pythonVersion = childProcess.execSync(`${PYTHON_BIN} --version`).toString().split('\r\n')[0].split(' ')[1]
@@ -46,7 +46,7 @@ function activate(context) {
 	term.show(false)  // using false here lets the terminal take focus on startup
 
 	// Track the remote device's working directory for devices. Used by commands like cp, ls, and rm.
-  let remoteWorkingDir = {}
+	let remoteWorkingDir = {}
 	remoteWorkingDir['default'] = '/'
 
 	/* Utility functions */
@@ -55,11 +55,11 @@ function activate(context) {
 	 * Join file path components using forward slash separator. Because path.join() on Windows will
 	 * try to use a backslash.
 	 */
-  function join() {
+	function join() {
 		let path = ''
 		for (let i=0; i<arguments.length; i++) {
 			if (path.endsWith('/') || arguments[i].startsWith('/')) {
-        path += arguments[i]        
+				path += arguments[i]
 			}
 			else {
 				path += '/' + arguments[i]
@@ -82,12 +82,12 @@ function activate(context) {
 				resolve(comPortList[0].path)
 			}
 			else {
-  			let portSelectionList = comPortList.map(port => {
+				let portSelectionList = comPortList.map(port => {
 					return {
-            label: port.path,
+						label: port.path,
 						detail: port.friendlyName
 					}
-			  })
+				})
 				console.debug('Attached devices:', comPortList)
 				let options = {
 					title: 'Choose a device',
@@ -95,10 +95,10 @@ function activate(context) {
 					matchOnDetail: true
 				}
 				vscode.window.showQuickPick(portSelectionList, options)
-				.then(choice => {
-  				resolve(choice.label)
-			  })
-			}	
+					.then(choice => {
+						resolve(choice.label)
+					})
+			}
 		})
 	}
 
@@ -130,9 +130,9 @@ function activate(context) {
 				}
 			})
 		})
-  }
+	}
 
-  /* Command Palette definitions follow... */
+	/* Command Palette definitions follow... */
 
 	/*
 	 *  Gather file names from the current remote working directory, present the choices
@@ -150,13 +150,13 @@ function activate(context) {
 			matchOnDetail: true
 		}
 		vscode.window.showQuickPick(dirEntries, options)
-		.then(filename => {
-			console.debug('User selection:', filename)
-			if (filename !== undefined) {  // undefined when user aborts or selection times out
-				let filepath = join(cwd, filename)
-				term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs cat ${filepath}`)
-			}
-		})
+			.then(filename => {
+				console.debug('User selection:', filename)
+				if (filename !== undefined) {  // undefined when user aborts or selection times out
+					let filepath = join(cwd, filename)
+					term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs cat ${filepath}`)
+				}
+			})
 	})
 
 	context.subscriptions.push(catFileCommand)
@@ -165,13 +165,13 @@ function activate(context) {
 	 *  Change the remote parent path used for file operations like cp, ls, rm, etc.
 	 *  The parent path is stored per serial port in case there are multiple devices.
 	 */
-  let chdirCommand = vscode.commands.registerCommand('mpremote.chdir', async () => {
+	let chdirCommand = vscode.commands.registerCommand('mpremote.chdir', async () => {
 		let port = await getDevicePort()
 		let cwd = remoteWorkingDir[port] || remoteWorkingDir['default']
 		console.debug('cwd:', cwd)
 		let subdirs = await getRemoteDirEntries(port, cwd, STAT_MASK_DIR)
 		if (cwd != '/') {
-  		subdirs.unshift('..')
+			subdirs.unshift('..')
 		}
 		let options = {
 			title: `Choose the working directory for ${port}:${cwd}`,
@@ -179,19 +179,19 @@ function activate(context) {
 			matchOnDetail: true
 		}
 		vscode.window.showQuickPick(subdirs, options)
-		.then(choice => {
-			console.debug('User selection:', choice)
-			if (choice !== undefined) {  // undefined when user aborts or selection times out
-				if (choice == '..') {
-					remoteWorkingDir[port] = cwd.substring(0, cwd.lastIndexOf('/'))
+			.then(choice => {
+				console.debug('User selection:', choice)
+				if (choice !== undefined) {  // undefined when user aborts or selection times out
+					if (choice == '..') {
+						remoteWorkingDir[port] = cwd.substring(0, cwd.lastIndexOf('/'))
+					}
+					else {
+						remoteWorkingDir[port] = join(cwd, choice)
+					}
+					console.debug('New remote working directory:', remoteWorkingDir[port])
+					term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs ls ${remoteWorkingDir[port]}`)
 				}
-				else {
-				  remoteWorkingDir[port] = join(cwd, choice)
-				}
-				console.debug('New remote working directory:', remoteWorkingDir[port])
-				term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs ls ${remoteWorkingDir[port]}`)
-			}
-		})
+			})
 	})
 
 	context.subscriptions.push(chdirCommand)
@@ -229,18 +229,18 @@ function activate(context) {
 			matchOnDetail: true
 		}
 		vscode.window.showQuickPick(dirEntries, options)
-		.then(dirname => {
-			console.debug('User selection:', dirname)
-			if (dirname !== undefined) {  // undefined when user aborts or selection times out
-				let dirpath = join(cwd, dirname)
-				vscode.window.showInformationMessage(`Delete ${dirpath}?`, "OK", "Cancel")
-				.then(confirmation => {
-					if (confirmation === "OK") {
-						term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs rm ${dirpath}`)
-					}
-				})
-			}
-		})
+			.then(dirname => {
+				console.debug('User selection:', dirname)
+				if (dirname !== undefined) {  // undefined when user aborts or selection times out
+					let dirpath = join(cwd, dirname)
+					vscode.window.showInformationMessage(`Delete ${dirpath}?`, "OK", "Cancel")
+						.then(confirmation => {
+							if (confirmation === "OK") {
+								term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs rm ${dirpath}`)
+							}
+						})
+				}
+			})
 	})
 
 	context.subscriptions.push(removeDirCommand)
@@ -260,18 +260,18 @@ function activate(context) {
 			matchOnDetail: true
 		}
 		vscode.window.showQuickPick(dirEntries, options)
-		.then(filename => {
-			console.debug('User selection:', filename)
-			if (filename !== undefined) {  // undefined when user aborts or selection times out
-				let filepath = join(cwd, filename)
-				vscode.window.showInformationMessage(`Delete ${filepath}?`, "OK", "Cancel")
-				.then(confirmation => {
-					if (confirmation === "OK") {
-						term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs rm ${filepath}`)
-					}
-				})
-			}
-		})
+			.then(filename => {
+				console.debug('User selection:', filename)
+				if (filename !== undefined) {  // undefined when user aborts or selection times out
+					let filepath = join(cwd, filename)
+					vscode.window.showInformationMessage(`Delete ${filepath}?`, "OK", "Cancel")
+						.then(confirmation => {
+							if (confirmation === "OK") {
+								term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs rm ${filepath}`)
+							}
+						})
+				}
+			})
 	})
 
 	context.subscriptions.push(removeFilesCommand)
@@ -293,27 +293,27 @@ function activate(context) {
 			matchOnDetail: true
 		}
 		vscode.window.showQuickPick(dirEntries, options)
-		.then(choice => {
-			console.debug('User selection:', choice)
-			if (choice !== undefined) {
-				const options = {
-					title: 'Choose local destination',
-					canSelectMany: false,
-					openLabel: 'Select Folder',
-					canSelectFiles: false,
-					canSelectFolders: true
-				}
-				vscode.window.showOpenDialog(options)
-				.then(fileUri => {
-					if (fileUri && fileUri[0]) {
-						let localDir = fileUri[0].fsPath
-						let localFile = path.join(localDir, choice)
-						let remoteFile = join(cwd, choice)
-						term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs cp ':${remoteFile}' '${localFile}'`)
+			.then(choice => {
+				console.debug('User selection:', choice)
+				if (choice !== undefined) {
+					const options = {
+						title: 'Choose local destination',
+						canSelectMany: false,
+						openLabel: 'Select Folder',
+						canSelectFiles: false,
+						canSelectFolders: true
 					}
-				})
-			}
-		})
+					vscode.window.showOpenDialog(options)
+						.then(fileUri => {
+							if (fileUri && fileUri[0]) {
+								let localDir = fileUri[0].fsPath
+								let localFile = path.join(localDir, choice)
+								let remoteFile = join(cwd, choice)
+								term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs cp ':${remoteFile}' '${localFile}'`)
+							}
+						})
+				}
+			})
 	})
 
 	context.subscriptions.push(downloadFileCommand)
@@ -440,20 +440,25 @@ function activate(context) {
 				}
 				else {
 					console.debug('Directory entries found:', entries.length)
-					entries.forEach(entry => {
-						console.debug('Examining directory entry:', entry)
-						if (entry.isDirectory()) {
-							if (SYNC_IGNORE.includes(entry.name)) {
-								console.debug('Skipping directory:', entry.name)
-							}
-							else {
-  							console.debug(`${PYTHON_BIN} -m mpremote connect ${port} fs cp -r ${entry.name} :`)
-	  						term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs cp -r ${entry.name} :`)
-							}
-						}
-						else {
-							console.debug(`${PYTHON_BIN} -m mpremote connect ${port} fs cp ${entry.name} :`)
-						  term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs cp ${entry.name} :`)
+					vscode.window.showInformationMessage(`Overwrite all files on ${port}:/ with local copies?`, "OK", "Cancel")
+					.then(confirmation => {
+						if (confirmation === "OK") {
+							entries.forEach(entry => {
+								console.debug('Examining directory entry:', entry)
+								if (entry.isDirectory()) {
+									if (SYNC_IGNORE.includes(entry.name)) {
+										console.debug('Skipping directory:', entry.name)
+									}
+									else {
+										console.debug(`${PYTHON_BIN} -m mpremote connect ${port} fs cp -r ${entry.name} :`)
+										term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs cp -r ${entry.name} :`)
+									}
+								}
+								else {
+									console.debug(`${PYTHON_BIN} -m mpremote connect ${port} fs cp ${entry.name} :`)
+									term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs cp ${entry.name} :`)
+								}
+							})
 						}
 					})
 				}
