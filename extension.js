@@ -2,10 +2,14 @@ const vscode = require('vscode')
 const serialport = require('serialport')
 const childProcess = require('child_process')
 const path = require('path')
+const fs = require('fs')
+const url = require('url')
 
 const STAT_MASK_DIR = 0x4000
 const STAT_MASK_FILE = 0x8000
 const STAT_MASK_ALL = 0xFFFF
+
+const SYNC_IGNORE = ['.git']  // prevent uploading source control dirs to flash
 
 /**
  * Check for Python prerequisites and register commands.
@@ -415,6 +419,51 @@ function activate(context) {
 	})
 
 	context.subscriptions.push(disconnectCommand)
+
+	/*
+	 *  Copy entire project directory to remote flash file system. 
+	 */
+	let syncCommand = vscode.commands.registerCommand('mpremote.sync', async () => {
+		if (!vscode.workspace.workspaceFolders || vscode.workspace.workspaceFolders.length != 1) {
+			vscode.window.showErrorMessage('Unable to sync. Open a folder first.')
+		}
+		else {
+			console.debug('vscode.workspace.workspaceFolders[0]', vscode.workspace.workspaceFolders[0])
+			console.debug('uri._fsPath:', vscode.workspace.workspaceFolders[0].uri._fsPath)
+			//console.debug('url.fileURLToPath:', url.fileURLToPath(vscode.workspace.workspaceFolders[0].uri.path))
+			let projectRoot = vscode.workspace.workspaceFolders[0].uri._fsPath
+			console.debug('Project folder path:', projectRoot)
+			let port = await getDevicePort()
+			term.sendText(`cd '${projectRoot}'`)
+			fs.readdir(projectRoot, { withFileTypes: true }, (err, entries) => {
+				if (err) {
+					console.error(err)
+					vscode.window.showErrorMessage('Unable to read directory.')
+				}
+				else {
+					console.debug('Directory entries found:', entries.length)
+					entries.forEach(entry => {
+						console.debug('Examining directory entry:', entry)
+						if (entry.isDirectory()) {
+							if (SYNC_IGNORE.includes(entry.name)) {
+								console.debug('Skipping directory:', entry.name)
+							}
+							else {
+  							console.debug(`${PYTHON_BIN} -m mpremote connect ${port} fs cp -r ${entry.name} :`)
+	  						term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs cp -r ${entry.name} :`)
+							}
+						}
+						else {
+							console.debug(`${PYTHON_BIN} -m mpremote connect ${port} fs cp ${entry.name} :`)
+						  term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs cp ${entry.name} :`)
+						}
+					})
+				}
+			})
+		}	
+	})
+
+	context.subscriptions.push(syncCommand)
 }
 
 function deactivate() { }

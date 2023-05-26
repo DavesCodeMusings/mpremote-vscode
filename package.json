@@ -28,7 +28,8 @@
     "onCommand:mpremote.disconnect",
     "onCommand:mpremote.rm",
     "onCommand:mpremote.rmdir",
-    "onCommand:mpremote.run"
+    "onCommand:mpremote.run",
+    "onCommand:mpremote.sync"
   ],
   "main": "./extension.js",
   "contributes": {
@@ -84,6 +85,10 @@
       {
         "command": "mpremote.run",
         "title": "MPRemote: Run file shown in the active editor (run)"
+      },
+      {
+        "command": "mpremote.sync",
+        "title": "MPRemote: Upload project files to remote filesystem (sync)"
       }
     ]
   },
