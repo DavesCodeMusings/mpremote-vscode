@@ -429,9 +429,7 @@ function activate(context) {
 		}
 		else {
 			console.debug('vscode.workspace.workspaceFolders[0]', vscode.workspace.workspaceFolders[0])
-			console.debug('uri._fsPath:', vscode.workspace.workspaceFolders[0].uri._fsPath)
-			//console.debug('url.fileURLToPath:', url.fileURLToPath(vscode.workspace.workspaceFolders[0].uri.path))
-			let projectRoot = vscode.workspace.workspaceFolders[0].uri._fsPath
+			let projectRoot = vscode.workspace.workspaceFolders[0].uri.fsPath
 			console.debug('Project folder path:', projectRoot)
 			let port = await getDevicePort()
 			term.sendText(`cd '${projectRoot}'`)
