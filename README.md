@@ -46,6 +46,9 @@ MAJOR = mpremote major,
 MINOR = mpremote minor,
 PATCH = extension version
 
+## 1.20.4 Release Notes
+Added sync command for mass upload.
+
 ## 1.20.3 Release Notes
 New commands and UI consistency improvements.
 
