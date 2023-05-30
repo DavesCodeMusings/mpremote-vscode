@@ -274,7 +274,7 @@ function activate(context) {
 									vscode.window.showInformationMessage(`Delete ${dirpath}?`, "OK", "Cancel")
 										.then(confirmation => {
 											if (confirmation === "OK") {
-												term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs rm ${dirpath}`)
+												term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} fs rmdir ${dirpath}`)
 											}
 										})
 										.catch((err) => {
