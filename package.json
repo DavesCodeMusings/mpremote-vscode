@@ -6,7 +6,7 @@
   "publisher": "DavesCodeMusings",
   "version": "1.20.4",
   "engines": {
-    "vscode": "^1.73.0"
+    "vscode": "^1.75.0"
   },
   "repository": {
     "type": "git",
@@ -14,23 +14,6 @@
   },
   "categories": [
     "Other"
-  ],
-  "activationEvents": [
-    "onCommand:mpremote.cat",
-    "onCommand:mpremote.chdir",
-    "onCommand:mpremote.devs",
-    "onCommand:mpremote.download",
-    "onCommand:mpremote.ls",
-    "onCommand:mpremote.mkdir",
-    "onCommand:mpremote.upload",
-    "onCommand:mpremote.repl",
-    "onCommand:mpremote.reset",
-    "onCommand:mpremote.mipinstall",
-    "onCommand:mpremote.disconnect",
-    "onCommand:mpremote.rm",
-    "onCommand:mpremote.rmdir",
-    "onCommand:mpremote.run",
-    "onCommand:mpremote.sync"
   ],
   "main": "./extension.js",
   "contributes": {
