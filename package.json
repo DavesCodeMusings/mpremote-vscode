@@ -24,6 +24,7 @@
     "onCommand:mpremote.mkdir",
     "onCommand:mpremote.upload",
     "onCommand:mpremote.repl",
+    "onCommand:mpremote.reset",
     "onCommand:mpremote.mipinstall",
     "onCommand:mpremote.disconnect",
     "onCommand:mpremote.rm",
@@ -69,6 +70,10 @@
       {
         "command": "mpremote.repl",
         "title": "MPRemote: Enter REPL prompt (repl)"
+      },
+      {
+        "command": "mpremote.reset",
+        "title": "MPRemote: Reset device (reset)"
       },
       {
         "command": "mpremote.disconnect",

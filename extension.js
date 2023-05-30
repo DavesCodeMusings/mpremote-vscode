@@ -374,6 +374,16 @@ function activate(context) {
 	context.subscriptions.push(replCommand)
 
 	/*
+	 *  Reset the device. (Like pressing the board's RESET button.)
+	 */
+	let resetCommand = vscode.commands.registerCommand('mpremote.reset', async () => {
+		let port = await getDevicePort()
+		term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} reset`)
+	})
+
+	context.subscriptions.push(resetCommand)
+
+	/*
 	 *  Use MPRemote's run command to execute the file whose path is determined by the
 	 *  active editor window, giving the appearance of running the code on the screen.
 	 */
