@@ -75,6 +75,10 @@
         "title": "MPRemote: Run file shown in the active editor (run)"
       },
       {
+        "command": "mpremote.setrtc",
+        "title": "MPRemote: Set realtime clock to match host date-time (setrtc)"
+      },
+      {
         "command": "mpremote.sync",
         "title": "MPRemote: Upload project files to remote filesystem (sync)"
       }
