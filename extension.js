@@ -3,7 +3,6 @@ const serialport = require('serialport')
 const childProcess = require('child_process')
 const path = require('path')
 const fs = require('fs')
-const url = require('url')
 
 const STAT_MASK_DIR = 0x4000
 const STAT_MASK_FILE = 0x8000
