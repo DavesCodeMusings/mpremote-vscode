@@ -70,34 +70,37 @@ function activate(context) {
 	/**
 	 *  Return COM port of attached device. Prompt user to choose when multiple devices are found.
 	 */
-	async function getDevicePort() {
+  async function getDevicePort() {
 		let comPortList = await serialport.SerialPort.list()
 
 		return new Promise((resolve, reject) => {
 			if (comPortList == null || comPortList.length == 0) {
-				resolve('auto')  // detection failed but maybe esptool can still figure it out
+				console.debug('No device found on any port.')
+				reject('No device detected.')
 			}
 			else if (comPortList.length == 1) {
+				console.debug('Using device on port:', comPortList[0].path)
 				resolve(comPortList[0].path)
 			}
 			else {
-				let portSelectionList = comPortList.map(port => {
+  			let portSelectionList = comPortList.map(port => {
 					return {
-						label: port.path,
+            label: port.path,
 						detail: port.friendlyName
 					}
-				})
+			  })
 				console.debug('Attached devices:', comPortList)
 				let options = {
-					title: 'Choose a device',
+					title: 'Select device',
 					canSelectMany: false,
 					matchOnDetail: true
 				}
 				vscode.window.showQuickPick(portSelectionList, options)
-					.then(choice => {
-						resolve(choice.label)
-					})
-			}
+				.then(choice => {
+					console.debug('Using device on port:', choice.label)
+  				resolve(choice.label)
+			  })
+			}	
 		})
 	}
 
