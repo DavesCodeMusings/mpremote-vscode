@@ -22,69 +22,135 @@
     "commands": [
       {
         "command": "mpremote.cat",
-        "title": "MPRemote: Show file contents (cat)"
+        "title": "Show file contents (cat)",
+        "category": "MPRemote"
       },
       {
         "command": "mpremote.chdir",
-        "title": "MPRemote: Change remote working directory (chdir)"
+        "title": "Change remote working directory (chdir)",
+        "category": "MPRemote"
       },
       {
         "command": "mpremote.devs",
-        "title": "MPRemote: Scan for attached devices (devs)"
+        "title": "Scan for attached devices (devs)",
+        "category": "MPRemote"
       },
       {
         "command": "mpremote.download",
-        "title": "MPRemote: Download file from remote filesystem"
+        "title": "Download file from remote filesystem",
+        "category": "MPRemote"
       },
       {
         "command": "mpremote.ls",
-        "title": "MPRemote: List files on remote filesystem (ls)"
+        "title": "List files on remote filesystem (ls)",
+        "category": "MPRemote"
       },
       {
         "command": "mpremote.mkdir",
-        "title": "MPRemote: Make new directory (mkdir)"
+        "title": "Make new directory (mkdir)",
+        "category": "MPRemote"
       },
       {
         "command": "mpremote.upload",
-        "title": "MPRemote: Upload file to remote filesystem (cp)"
+        "title": "Upload file to remote filesystem (cp)",
+        "category": "MPRemote"
       },
       {
         "command": "mpremote.mipinstall",
-        "title": "MPRemote: Install package on device (mip)"
+        "title": "Install package on device (mip)",
+        "category": "MPRemote"
       },
       {
         "command": "mpremote.repl",
-        "title": "MPRemote: Enter REPL prompt (repl)"
+        "title": "Enter REPL prompt (repl)",
+        "category": "MPRemote"
       },
       {
         "command": "mpremote.reset",
-        "title": "MPRemote: Reset device (reset)"
+        "title": "Reset device (reset)",
+        "category": "MPRemote"
       },
       {
         "command": "mpremote.disconnect",
-        "title": "MPRemote: Disconnect from device (disconnect)"
+        "title": "Disconnect from device (disconnect)",
+        "category": "MPRemote"
       },
       {
         "command": "mpremote.rm",
-        "title": "MPRemote: Remove file from remote filesystem (rm)"
+        "title": "Remove file from remote filesystem (rm)",
+        "category": "MPRemote"
       },
       {
         "command": "mpremote.rmdir",
-        "title": "MPRemote: Remove directory from remote filesystem (rmdir)"
+        "title": "Remove directory from remote filesystem (rmdir)",
+        "category": "MPRemote"
       },
       {
         "command": "mpremote.run",
-        "title": "MPRemote: Run file shown in the active editor (run)"
+        "title": "Run file shown in the active editor (run)",
+        "category": "MPRemote"
       },
       {
         "command": "mpremote.setrtc",
-        "title": "MPRemote: Set realtime clock to match host date-time (setrtc)"
+        "title": "Set realtime clock to match host date-time (setrtc)",
+        "category": "MPRemote"
       },
       {
         "command": "mpremote.sync",
-        "title": "MPRemote: Upload project files to remote filesystem (sync)"
+        "title": "Upload project files to remote filesystem (sync)",
+        "category": "MPRemote"
       }
-    ]
+    ],
+    "submenus": [
+      {
+        "id": "mpremote.editorContextSubMenu",
+        "label": "MPRemote",
+        "when": "resourceLangId == python"
+      },
+      {
+        "id": "mpremote.explorerContextSubMenu",
+        "label": "MPRemote",
+        "when": "resourceLangId == python"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "submenu": "mpremote.editorContextSubMenu",
+          "group": "mpremote",
+          "when": "resourceLangId == python"
+        }
+      ],
+      "mpremote.editorContextSubMenu": [
+        {
+          "command": "mpremote.chdir"
+        },
+        {
+          "command": "mpremote.repl"
+        },
+        {
+          "command": "mpremote.run"
+        },
+        {
+          "command": "mpremote.upload"
+        }
+      ],
+      "explorer/context": [
+        {
+          "submenu": "mpremote.explorerContextSubMenu",
+          "group": "mpremote",
+          "when": "resourceLangId == python"
+        }
+      ],
+      "mpremote.explorerContextSubMenu": [
+        {
+          "command": "mpremote.repl"
+        },
+        {
+          "command": "mpremote.sync"
+        }
+      ]
+    }
   },
   "scripts": {
     "lint": "eslint .",
