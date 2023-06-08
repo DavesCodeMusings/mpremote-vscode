@@ -46,7 +46,10 @@ MAJOR = mpremote major,
 MINOR = mpremote minor,
 PATCH = extension version
 
-## 1.20.5 Release Note
+## 1.20.6 Release Notes
+Add some commands to context menus.
+
+## 1.20.5 Release Notes
 Code improvements, fixes, and new `setrtc` command.
 
 ## 1.20.4 Release Notes
