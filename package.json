@@ -97,7 +97,7 @@
       },
       {
         "command": "mpremote.sync",
-        "title": "Upload project files to remote filesystem (sync)",
+        "title": "Upload all project files to remote filesystem (sync)",
         "category": "MPRemote"
       }
     ],
@@ -150,7 +150,30 @@
           "command": "mpremote.sync"
         }
       ]
-    }
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "mpremoteViewContainer",
+          "title": "MPRemote",
+          "icon": "images/snake.svg"
+        }
+      ]
+    },
+    "views": {
+      "mpremoteViewContainer": [
+        {
+          "id": "mpremote.gettingStarted",
+          "name": "Getting Started"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "mpremote.gettingStarted",
+        "contents": "Start by opening the folder containing your MicroPython code.\n[Open Folder](command:vscode.openFolder)\nEdit as needed, then recursively upload all your project files to the microcontroller.\n[Sync](command:mpremote.sync)\nFinally, start a REPL prompt and reset your microcontroller to observe debug output.\n[REPL](command:mpremote.repl)\nLearn more about how to use this extension by visiting the [project wiki](https://github.com/DavesCodeMusings/mpremote-vscode/wiki)."
+      }
+    ]
   },
   "scripts": {
     "lint": "eslint .",
