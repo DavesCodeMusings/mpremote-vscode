@@ -46,6 +46,9 @@ MAJOR = mpremote major,
 MINOR = mpremote minor,
 PATCH = extension version
 
+## 1.20.7 Release Notes
+Add welcome view to activity bar.
+
 ## 1.20.6 Release Notes
 Add some commands to context menus.
 
