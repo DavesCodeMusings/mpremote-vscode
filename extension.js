@@ -582,7 +582,6 @@ function activate(context) {
 			console.debug('Project folder path:', projectRoot)
 			getDevicePort()
 				.then((port) => {
-					term.sendText(`cd '${projectRoot}'`)
 					fs.readdir(projectRoot, { withFileTypes: true }, (err, entries) => {
 						if (err) {
 							console.error(err)
@@ -590,9 +589,10 @@ function activate(context) {
 						}
 						else {
 							console.debug('Directory entries found:', entries.length)
-							vscode.window.showInformationMessage(`Overwrite all files on ${port}:/ with local copies?`, "OK", "Cancel")
+							vscode.window.showInformationMessage(`Overwrite all files on ${port}:/ with local copies from ${projectRoot}?`, "OK", "Cancel")
 								.then(confirmation => {
 									if (confirmation === "OK") {
+										term.sendText(`cd '${projectRoot}'`)
 										entries.forEach(entry => {
 											console.debug('Examining directory entry:', entry)
 											if (entry.isDirectory()) {
