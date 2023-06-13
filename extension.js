@@ -541,7 +541,9 @@ function activate(context) {
 				}
 				vscode.window.showInputBox(options)
 					.then((pkg) => {
-						term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} mip install ${pkg}`)
+						if (pkg) {
+							term.sendText(`${PYTHON_BIN} -m mpremote connect ${port} mip install ${pkg}`)
+						}
 					})
 					.catch((err) => {
 						vscode.window.showErrorMessage(err)
