@@ -72,7 +72,16 @@ function activate(context) {
 	 */
 	async function getDevicePort() {
 		let comPortList = await serialport.SerialPort.list()
-
+		let comPortSkipList = vscode.workspace.getConfiguration('mpremote').serialPort.skip.replace(/\s/g, '').split(',')
+		console.debug('Detected serial ports:', comPortList)
+		console.debug('Serial port skip list:', comPortSkipList)
+		for (let i=0; i<comPortList.length; i++) {
+			if (comPortSkipList.includes(comPortList[i].path)) {
+				console.debug('Removing serial port on skip list:', comPortList[i].path)
+				comPortList.splice(i, 1)
+			}
+		}
+		console.debug('Updated serial port list:', comPortList)
 		return new Promise((resolve, reject) => {
 			if (comPortList == null || comPortList.length == 0) {
 				console.debug('No device found on any port.')

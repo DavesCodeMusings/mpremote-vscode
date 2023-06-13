@@ -173,7 +173,17 @@
         "view": "mpremote.gettingStarted",
         "contents": "Start by opening the folder containing your MicroPython code.\n[$(folder) Open Folder](command:vscode.openFolder)\nEdit as needed, then recursively upload all your project files to the microcontroller.\n[$(refresh) Sync $(arrow-up)](command:mpremote.sync)\nFinally, start a REPL prompt and reset your microcontroller to observe debug output.\n[REPL $(chevron-right)](command:mpremote.repl)\nLearn more about how to use this extension by visiting the [project wiki](https://github.com/DavesCodeMusings/mpremote-vscode/wiki)."
       }
-    ]
+    ],
+    "configuration": {
+      "title": "MPRemote",
+      "properties": {
+        "mpremote.serialPort.skip": {
+          "type": "string",
+          "default": null,
+          "description": "For serial ports that are present on the development host, but will never have a microcontroller attached. Enter them here to avoid erroneous detection. Use commas to separate multiple ports."
+        }
+      }
+    }
   },
   "scripts": {
     "lint": "eslint .",
