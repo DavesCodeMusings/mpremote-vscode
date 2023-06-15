@@ -15,6 +15,10 @@ const SYNC_IGNORE = ['.git']  // prevent uploading source control dirs to flash
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
+	// All mpremote commands are run in the integrated terminal so output is visible.
+	const term = vscode.window.createTerminal('mpremote')
+	term.show(false)  // using false here lets the terminal take focus on startup
+
 	// Assume this is a Windows system, but adjust if not.
 	let PYTHON_BIN = 'py.exe'
 	console.debug('Operating System:', process.platform)
@@ -39,10 +43,6 @@ function activate(context) {
 	catch (ex) {
 		vscode.window.showErrorMessage('mpremote is not installed or could not be run as a Python module')
 	}
-
-	// All commands are run in the integrated terminal so output is visible.
-	const term = vscode.window.createTerminal('mpremote')
-	term.show(false)  // using false here lets the terminal take focus on startup
 
 	// Track the remote device's working directory for devices. Used by commands like cp, ls, and rm.
 	let remoteWorkingDir = {}
