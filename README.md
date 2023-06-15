@@ -46,6 +46,9 @@ MAJOR = mpremote major,
 MINOR = mpremote minor,
 PATCH = extension version
 
+## 1.20.9 Release Notes
+Closes Python virtual env bug (issue #4). Also minor UI tweak.
+
 ## 1.20.8 Release Notes
 Closes mip bug (issue #3) and serial port skip enhancement (issue #5)
 
