@@ -46,6 +46,13 @@ MAJOR = mpremote major,
 MINOR = mpremote minor,
 PATCH = extension version
 
+## 1.20.11 Release Notes
+Skipping the dot ten release, because there are so many changes. This one...
+wait for it... this one goes up to eleven!
+
+Converted code to TypeScript. Updated user interface with serial port explorer
+view and many more context menu options. Removed welcome view and snake icon.
+
 ## 1.20.9 Release Notes
 Closes Python virtual env bug (issue #4). Also minor UI tweak.
 

@@ -1,44 +1,47 @@
 {
   "name": "mpremote",
-  "displayName": "MPRemote",
-  "description": "Command palette access for MicroPython mpremote",
-  "icon": "images/snake.png",
-  "publisher": "DavesCodeMusings",
-  "version": "1.20.9",
+  "displayName": "mpremote",
+  "description": "",
+  "version": "1.20.11",
   "engines": {
-    "vscode": "^1.75.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/DavesCodeMusings/mpremote-vscode.git"
+    "vscode": "^1.79.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [
-  ],
-  "main": "./extension.js",
+  "activationEvents": [],
+  "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
+        "command": "mpremote.refreshSerialPorts",
+        "category": "MPRemote",
+        "title": "Rescan available serial ports",
+        "icon": "$(refresh)"
+      },
+      {
         "command": "mpremote.cat",
-        "title": "Show file contents (cat)",
-        "category": "MPRemote"
+        "category": "MPRemote",
+        "title": "Show contents of a file (cat)",
+        "icon": "$(file-text)"
       },
       {
         "command": "mpremote.chdir",
+        "category": "MPRemote",
         "title": "Change remote working directory (chdir)",
-        "category": "MPRemote"
+        "icon": "$(file-directory)"
       },
       {
         "command": "mpremote.devs",
-        "title": "Scan for attached devices (devs)",
-        "category": "MPRemote"
+        "category": "MPRemote",
+        "title": "Show attached device info (devs)",
+        "icon": "$(list-ordered)"
       },
       {
         "command": "mpremote.download",
-        "title": "Download file from remote filesystem",
-        "category": "MPRemote"
+        "title": "Download a file from remote filesystem",
+        "category": "MPRemote",
+        "icon": "$(arrow-down)"
       },
       {
         "command": "mpremote.ls",
@@ -46,69 +49,88 @@
         "category": "MPRemote"
       },
       {
-        "command": "mpremote.mkdir",
-        "title": "Make new directory (mkdir)",
-        "category": "MPRemote"
+        "command": "mpremote.mipInstall",
+        "category": "MPRemote",
+         "title": "Install a package on device (mip)",
+         "icon": "$(package)"
       },
       {
-        "command": "mpremote.upload",
-        "title": "Upload file to remote filesystem (cp)",
-        "category": "MPRemote"
-      },
-      {
-        "command": "mpremote.mipinstall",
-        "title": "Install package on device (mip)",
-        "category": "MPRemote"
+          "command": "mpremote.mkdir",
+          "title": "Make a new directory (mkdir)",
+          "category": "MPRemote",
+          "icon": "$(file-directory-create)"
       },
       {
         "command": "mpremote.repl",
+        "category": "MPRemote",
         "title": "Enter REPL prompt (repl)",
-        "category": "MPRemote"
+        "icon": "$(repl)"
       },
       {
         "command": "mpremote.reset",
         "title": "Reset device (reset)",
-        "category": "MPRemote"
-      },
-      {
-        "command": "mpremote.disconnect",
-        "title": "Disconnect from device (disconnect)",
-        "category": "MPRemote"
+        "category": "MPRemote",
+        "icon": "stop"
       },
       {
         "command": "mpremote.rm",
-        "title": "Remove file from remote filesystem (rm)",
-        "category": "MPRemote"
+        "title": "Remove a file from remote filesystem (rm)",
+        "category": "MPRemote",
+        "icon": "$(trash)"
       },
       {
         "command": "mpremote.rmdir",
-        "title": "Remove directory from remote filesystem (rmdir)",
-        "category": "MPRemote"
+        "title": "Remove a directory from remote filesystem (rmdir)",
+        "category": "MPRemote",
+        "icon": "$(trash)"
       },
       {
         "command": "mpremote.run",
-        "title": "Run file shown in the active editor (run)",
-        "category": "MPRemote"
+        "title": "Run the file shown in the active editor (run)",
+        "category": "MPRemote",
+        "icon": "$(run)"
       },
       {
         "command": "mpremote.setrtc",
         "title": "Set realtime clock to match host date-time (setrtc)",
-        "category": "MPRemote"
+        "category": "MPRemote",
+        "icon": "$(clock)"
       },
       {
         "command": "mpremote.sync",
         "title": "Upload all project files to remote filesystem (sync)",
-        "category": "MPRemote"
+        "category": "MPRemote",
+        "icon": "$(arrow-up)"
+      },
+      {
+        "command": "mpremote.upload",
+        "title": "Upload file shown in editor to remote filesystem (upload)",
+        "category": "MPRemote",
+        "icon": "$(arrow-up)"
       }
     ],
+    "configuration": {
+      "title": "MPRemote",
+      "properties": {
+        "mpremote.serialPort.skip": {
+          "type": "string",
+          "default": null,
+          "description": "For serial ports that are present on the development host, but will never have a microcontroller attached. Enter them here to avoid erroneous detection. Use commas to separate multiple ports."
+        }
+      }
+    },
+    "views": {
+      "explorer": [
+        {
+          "id": "serialPortView",
+          "name": "Serial Ports",
+          "visibility": "visible"
+        }
+      ]
+    },
     "submenus": [
       {
         "id": "mpremote.editorContextSubMenu",
-        "label": "MPRemote",
-        "when": "resourceLangId == python"
-      },
-      {
-        "id": "mpremote.explorerContextSubMenu",
         "label": "MPRemote",
         "when": "resourceLangId == python"
       }
@@ -123,78 +145,91 @@
       ],
       "mpremote.editorContextSubMenu": [
         {
-          "command": "mpremote.chdir"
-        },
-        {
-          "command": "mpremote.repl"
-        },
-        {
           "command": "mpremote.run"
         },
         {
           "command": "mpremote.upload"
         }
       ],
-      "explorer/context": [
-        {
-          "submenu": "mpremote.explorerContextSubMenu",
-          "group": "mpremote",
-          "when": "resourceLangId == python"
+      "view/title": [
+          {
+              "command": "mpremote.refreshSerialPorts",
+              "when": "view == serialPortView",
+              "group": "navigation"
+          },
+          {
+            "command": "mpremote.devs",
+            "when": "view == serialPortView",
+            "group": "navigation"
         }
       ],
-      "mpremote.explorerContextSubMenu": [
-        {
-          "command": "mpremote.repl"
-        },
-        {
-          "command": "mpremote.sync"
-        }
-      ]
-    },
-    "viewsContainers": {
-      "activitybar": [
-        {
-          "id": "mpremoteViewContainer",
-          "title": "MPRemote",
-          "icon": "images/snake.svg"
-        }
-      ]
-    },
-    "views": {
-      "mpremoteViewContainer": [
-        {
-          "id": "mpremote.gettingStarted",
-          "name": "Getting Started"
-        }
-      ]
-    },
-    "viewsWelcome": [
-      {
-        "view": "mpremote.gettingStarted",
-        "contents": "Start by opening the folder containing your MicroPython code.\n[$(folder) Open Folder](command:vscode.openFolder)\nEdit as needed, then recursively upload all your project files to the microcontroller.\n[$(refresh) Sync $(arrow-up)](command:mpremote.sync)\nFinally, start a REPL prompt and reset your microcontroller to observe debug output.\n[REPL >>>](command:mpremote.repl)\nLearn more about how to use this extension by visiting the [project wiki](https://github.com/DavesCodeMusings/mpremote-vscode/wiki)."
-      }
-    ],
-    "configuration": {
-      "title": "MPRemote",
-      "properties": {
-        "mpremote.serialPort.skip": {
-          "type": "string",
-          "default": null,
-          "description": "For serial ports that are present on the development host, but will never have a microcontroller attached. Enter them here to avoid erroneous detection. Use commas to separate multiple ports."
-        }
-      }
+      "view/item/context": [
+          {
+              "command": "mpremote.cat",
+              "when": "view == serialPortView"
+          },
+          {
+              "command": "mpremote.chdir",
+              "when": "view == serialPortView"
+          },
+          {
+            "command": "mpremote.download",
+            "when": "view == serialPortView"
+          },
+          {
+              "command": "mpremote.ls",
+              "when": "view == serialPortView"
+          },
+          {
+              "command": "mpremote.mipInstall",
+              "when": "view == serialPortView"
+          },
+          {
+              "command": "mpremote.mkdir",
+              "when": "view == serialPortView"
+          },
+          {
+              "command": "mpremote.repl",
+              "when": "view == serialPortView"
+          },
+          {
+              "command": "mpremote.reset",
+              "when": "view == serialPortView"
+          },
+          {
+            "command": "mpremote.rm",
+            "when": "view == serialPortView"
+          },
+          {
+            "command": "mpremote.rmdir",
+            "when": "view == serialPortView"
+          },
+          {
+              "command": "mpremote.setrtc",
+              "when": "view == serialPortView"
+          },
+          {
+              "command": "mpremote.sync",
+              "when": "view == serialPortView"
+          }
+        ]
     }
   },
   "scripts": {
-    "lint": "eslint .",
-    "pretest": "npm run lint",
-    "test": "node ./test/runTest.js"
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
     "@types/glob": "^8.0.0",
     "@types/mocha": "^10.0.0",
     "@types/node": "16.x",
-    "@types/vscode": "^1.75.0",
+    "@types/vscode": "^1.79.0",
+    "@typescript-eslint/eslint-plugin": "^5.42.0",
+    "@typescript-eslint/parser": "^5.42.0",
     "@vscode/test-electron": "^2.2.0",
     "eslint": "^8.26.0",
     "glob": "^8.0.3",
@@ -202,6 +237,6 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
-    "serialport": "^10.4.0"
+    "serialport": "^11.0.0"
   }
 }
