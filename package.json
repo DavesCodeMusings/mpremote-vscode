@@ -6,6 +6,10 @@
   "engines": {
     "vscode": "^1.79.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DavesCodeMusings/mpremote-vscode.git"
+  },
   "categories": [
     "Other"
   ],
