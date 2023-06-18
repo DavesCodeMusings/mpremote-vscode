@@ -42,12 +42,9 @@ class MPRemote {
             this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} cp :${remotePath} ${localPath}`);
         }
     }
-    exec(port, cmd) {
+    exec(port, codeString) {
         if (port !== undefined) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} exec ${cmd}`);
-        }
-        else {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote exec ${cmd}`);
+            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} exec '${codeString}'`);
         }
     }
     listDevs() {

@@ -127,7 +127,7 @@ export async function activate(context: vscode.ExtensionContext) {
 				title: `Choose file to download from ${port}:${cwd}`,
 				canSelectMany: false,
 				matchOnDetail: true
-			}
+			};
 			vscode.window.showQuickPick(dirEntries, options)
 				.then(choice => {
 					console.debug('User selection:', choice);
@@ -155,6 +155,28 @@ export async function activate(context: vscode.ExtensionContext) {
 			vscode.window.showErrorMessage(err);
 		});
 
+	}));
+
+	/*
+	 *  Run 'mpremote exec to run a python statement on the device.
+	 */
+	context.subscriptions.push(vscode.commands.registerCommand('mpremote.exec', async (args) => {
+		let port: string = '';
+		if (args === undefined || args.label === undefined) {
+			port = await getDevicePort(serialPortDataProvider.getPortNames());
+		}
+		else {
+			port = args.label;
+		}
+		let options = {
+			title: `Python code to run on ${port}`
+		};
+		vscode.window.showInputBox(options)
+			.then((codeString) => {
+				if (codeString) {
+					mpremote.exec(port, codeString);
+				}
+			});
 	}));
 
 	/*
@@ -211,7 +233,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		}
 		let cwd = remoteWorkingDir.get(port) || remoteWorkingDir.get('default');
 		let options = {
-			title: "Directory to create under ${port}:${cwd}"
+			title: `Directory to create under ${port}:${cwd}`
 		};
 		vscode.window.showInputBox(options)
 			.then((newdir) => {

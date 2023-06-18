@@ -50,6 +50,12 @@
         "icon": "$(arrow-down)"
       },
       {
+        "command": "mpremote.exec",
+        "title": "Run a Python statement on the device (exec)",
+        "category": "MPRemote",
+        "icon": "$(run)"
+      },
+      {
         "command": "mpremote.ls",
         "title": "List files on remote filesystem (ls)",
         "category": "MPRemote"
@@ -186,13 +192,18 @@
             "when": "view == serialPortView"
           },
           {
+            "command": "mpremote.exec",
+            "group": "3_deviceGroup@1",
+            "when": "view == serialPortView"
+          },
+          {
               "command": "mpremote.ls",
               "group": "1_fileGroup@3",
               "when": "view == serialPortView"
           },
           {
               "command": "mpremote.mipInstall",
-              "group": "3_deviceGroup@1",
+              "group": "3_deviceGroup@2",
               "when": "view == serialPortView"
           },
           {
@@ -202,12 +213,12 @@
           },
           {
               "command": "mpremote.repl",
-              "group": "3_deviceGroup@2",
+              "group": "3_deviceGroup@3",
               "when": "view == serialPortView"
           },
           {
               "command": "mpremote.reset",
-              "group": "3_deviceGroup@3",
+              "group": "3_deviceGroup@4",
               "when": "view == serialPortView"
           },
           {
@@ -222,7 +233,7 @@
           },
           {
               "command": "mpremote.setrtc",
-              "group": "3_deviceGroup@4",
+              "group": "3_deviceGroup@5",
               "when": "view == serialPortView"
           },
           {

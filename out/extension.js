@@ -152,6 +152,27 @@ async function activate(context) {
         });
     }));
     /*
+     *  Run 'mpremote exec to run a python statement on the device.
+     */
+    context.subscriptions.push(vscode.commands.registerCommand('mpremote.exec', async (args) => {
+        let port = '';
+        if (args === undefined || args.label === undefined) {
+            port = await (0, utility_1.getDevicePort)(serialPortDataProvider.getPortNames());
+        }
+        else {
+            port = args.label;
+        }
+        let options = {
+            title: `Python code to run on ${port}`
+        };
+        vscode.window.showInputBox(options)
+            .then((codeString) => {
+            if (codeString) {
+                mpremote.exec(port, codeString);
+            }
+        });
+    }));
+    /*
      *  Run 'mpremote ls' for the device detected from the right-click of the serial port list.
      */
     context.subscriptions.push(vscode.commands.registerCommand('mpremote.ls', async (args) => {
@@ -202,7 +223,7 @@ async function activate(context) {
         }
         let cwd = remoteWorkingDir.get(port) || remoteWorkingDir.get('default');
         let options = {
-            title: "Directory to create under ${port}:${cwd}"
+            title: `Directory to create under ${port}:${cwd}`
         };
         vscode.window.showInputBox(options)
             .then((newdir) => {
