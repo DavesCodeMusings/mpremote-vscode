@@ -110,7 +110,7 @@
       },
       {
         "command": "mpremote.upload",
-        "title": "Upload file shown in editor to remote filesystem (upload)",
+        "title": "Upload file shown in editor to remote filesystem (cp)",
         "category": "MPRemote",
         "icon": "$(arrow-up)"
       }
