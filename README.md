@@ -46,54 +46,59 @@ MAJOR = mpremote major,
 MINOR = mpremote minor,
 PATCH = extension version
 
-## 1.20.11 Release Notes
+## Release Notes
+
+### 1.20.12 
+Added exec command. Organized context menu.
+
+### 1.20.11
 Skipping the dot ten release, because there are so many changes. This one...
 wait for it... this one goes up to eleven!
 
 Converted code to TypeScript. Updated user interface with serial port explorer
 view and many more context menu options. Removed welcome view and snake icon.
 
-## 1.20.9 Release Notes
+### 1.20.9
 Closes Python virtual env bug (issue #4). Also minor UI tweak.
 
-## 1.20.8 Release Notes
+### 1.20.8 
 Closes mip bug (issue #3) and serial port skip enhancement (issue #5)
 
-## 1.20.7 Release Notes
+### 1.20.7 
 Add welcome view to activity bar.
 
-## 1.20.6 Release Notes
+### 1.20.6 
 Add some commands to context menus.
 
-## 1.20.5 Release Notes
+### 1.20.5 
 Code improvements, fixes, and new `setrtc` command.
 
-## 1.20.4 Release Notes
+### 1.20.4 
 Added sync command for mass upload.
 
-## 1.20.3 Release Notes
+### 1.20.3 
 New commands and UI consistency improvements.
 
-## 1.20.2 Release Notes
+### 1.20.2 
 New commands. Better handling of remote subdirectories.
 
-## 1.20.1 Release Notes
+### 1.20.1 
 Fix problems when there are unsaved changes in editor.
 
-## 1.20.0 Release Notes
+### 1.20.0 
 Fix to use quotes around file paths so spaces don't cause problems.
 Bump version to match compatible mpremote version.
 
-## 0.4.4 Release Notes
+### 0.4.4 
 Fix to use py.exe only on Windows and python on all other OS.
 
-## 0.4.3  Release Notes
+### 0.4.3  
 Logo change.
 
-## 0.4.2 Release Notes
+### 0.4.2 
 Fixed upload file bug.
 
-## 0.4.1 Release Notes
+### 0.4.1 
 Detect COM ports as part of the extension's code rather than parsing
 output from mpremote's devs command.
 
