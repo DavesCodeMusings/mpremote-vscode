@@ -48,6 +48,10 @@ PATCH = extension version
 
 ## Release Notes
 
+### 1.20.13
+The "Born under a bad sign" release, with apologies to Albert King. Fixed
+missing code in the 'sync' command. Cleaned up string checking.
+
 ### 1.20.12 
 Added exec command. Organized context menu.
 
