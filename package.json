@@ -45,7 +45,7 @@
       },
       {
         "command": "mpremote.download",
-        "title": "Download a file from remote filesystem",
+        "title": "Download a file from remote filesystem (cp)",
         "category": "MPRemote",
         "icon": "$(arrow-down)"
       },
@@ -172,50 +172,62 @@
       "view/item/context": [
           {
               "command": "mpremote.cat",
+              "group": "1_fileGroup@1",
               "when": "view == serialPortView"
           },
           {
               "command": "mpremote.chdir",
+              "group": "2_dirGroup@1",
               "when": "view == serialPortView"
           },
           {
             "command": "mpremote.download",
+            "group": "1_fileGroup@2",
             "when": "view == serialPortView"
           },
           {
               "command": "mpremote.ls",
+              "group": "1_fileGroup@3",
               "when": "view == serialPortView"
           },
           {
               "command": "mpremote.mipInstall",
+              "group": "3_deviceGroup@1",
               "when": "view == serialPortView"
           },
           {
               "command": "mpremote.mkdir",
+              "group": "2_dirGroup@2",
               "when": "view == serialPortView"
           },
           {
               "command": "mpremote.repl",
+              "group": "3_deviceGroup@2",
               "when": "view == serialPortView"
           },
           {
               "command": "mpremote.reset",
+              "group": "3_deviceGroup@3",
               "when": "view == serialPortView"
           },
           {
             "command": "mpremote.rm",
+            "group": "1_fileGroup@4",
             "when": "view == serialPortView"
           },
           {
             "command": "mpremote.rmdir",
+            "group": "2_dirGroup@3",
             "when": "view == serialPortView"
           },
           {
               "command": "mpremote.setrtc",
+              "group": "3_deviceGroup@4",
               "when": "view == serialPortView"
           },
           {
               "command": "mpremote.sync",
+              "group": "1_fileGroup@5",
               "when": "view == serialPortView"
           }
         ]
