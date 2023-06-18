@@ -344,9 +344,6 @@ async function activate(context) {
             let port = args.label;
             mpremote.setrtc(port);
         }
-        else {
-            mpremote.setrtc(undefined); // defaults to first available serial port
-        }
     }));
     /*
      *  Recursively upload all files from the local project directory to the flash filesystem on the device.

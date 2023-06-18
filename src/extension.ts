@@ -361,9 +361,6 @@ export async function activate(context: vscode.ExtensionContext) {
 			let port = args.label;
 			mpremote.setrtc(port);
 		}
-		else {
-			mpremote.setrtc(undefined);  // defaults to first available serial port
-		}
 	}));
 
 	/*
