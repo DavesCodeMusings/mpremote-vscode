@@ -35,23 +35,20 @@ export class MPRemote {
         }
     }
 
-    cat(port: string | undefined, filepath: string) {
-        if (port !== undefined) {
+    cat(port: string, filepath: string) {
+        if (port) {
             this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} cat ${filepath}`);
-        }
-        else {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote exec ${filepath}`);
         }
     }
 
     download(port: string, remotePath: string, localPath: string) {
-        if (port !== undefined) {
+        if (port) {
             this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} cp :${remotePath} ${localPath}`);
         }
     }
 
     exec(port: string, codeString: string) {
-        if (port !== undefined) {
+        if (port) {
             this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} exec '${codeString}'`);
         }
     }
@@ -61,72 +58,61 @@ export class MPRemote {
     }
 
     ls(port: string, dir: string) {
-        this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs ls ${dir}`);
-    }
-
-    mipInstall(port: string | undefined, pkg: string) {
-        if (port !== undefined) {
-            if (pkg) {
-                this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} mip install ${pkg}`);
-            }
-        }
-        else {
-            if (pkg) {
-                this.terminal.sendText(`${this.pythonBinary} -m mpremote mip install ${pkg}`);
-            }
+        if (port) {
+            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs ls ${dir}`);
         }
     }
 
-    mkdir(port: string | undefined, dirpath: string) {
-        if (port !== undefined) {
+    mipInstall(port: string, pkg: string) {
+        if (port && pkg) {
+            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} mip install ${pkg}`);
+        }
+    }
+
+    mkdir(port: string, dirpath: string) {
+        if (port) {
             this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs mkdir ${dirpath}`);
         }
     }
 
-    repl(port: string | undefined) {
-        if (port !== undefined) {
+    repl(port: string) {
+        if (port) {
             this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} repl`);
-        }
-        else {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote repl`);
         }
     }
 
-    reset(port: string | undefined) {
-        if (port !== undefined) {
+    reset(port: string) {
+        if (port) {
             this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} reset`);
         }
     }
 
     rm(port: string, filepath: string) {
-        if (port !== undefined) {
+        if (port && filepath) {
             this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs rm :${filepath}`);
         }
     }
 
     rmdir(port: string, dirpath: string) {
-        if (port !== undefined) {
+        if (port && dirpath) {
             this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs rmdir :${dirpath}`);
         }
     }
 
     run(port: string, filepath: string) {
-        if (port !== undefined) {
+        if (port && filepath) {
             this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} run '${filepath}'`);
         }
     }
 
-    setrtc(port: string | undefined) {
-        if (port !== undefined) {
+    setrtc(port: string) {
+        if (port) {
             this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} setrtc`);
-        }
-        else {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote setrtc`);
         }
     }
 
     sync(port: string, projectRoot: string) {
-        if (port !== undefined) {
+        if (port && projectRoot) {
             console.debug("Sync it up, Kris! I'm about to.");
             this.terminal.sendText(`cd '${projectRoot}'`);
             readdir(projectRoot, { withFileTypes: true }, (err, entries) => {
@@ -159,7 +145,7 @@ export class MPRemote {
     }
 
     upload(port: string, localPath: string, remotePath: string) {
-        if (port !== undefined) {
+        if (port && localPath && remotePath) {
             this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} cp ${localPath} :${remotePath}`);
         }
     }
