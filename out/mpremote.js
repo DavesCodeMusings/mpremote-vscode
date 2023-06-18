@@ -3,6 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MPRemote = void 0;
 const vscode = require("vscode");
 const childProcess = require("child_process");
+const fs_1 = require("fs");
+const utility_1 = require("./utility");
 class MPRemote {
     constructor() {
         this.pythonBinary = 'py.exe'; // Assume this is a Windows system for now.
@@ -107,8 +109,36 @@ class MPRemote {
         }
     }
     sync(port, projectRoot) {
-        console.debug("Sync it up, Kris! I'm about to.");
-        this.terminal.sendText(`cd '${projectRoot}'`);
+        if (port !== undefined) {
+            console.debug("Sync it up, Kris! I'm about to.");
+            this.terminal.sendText(`cd '${projectRoot}'`);
+            (0, fs_1.readdir)(projectRoot, { withFileTypes: true }, (err, entries) => {
+                if (err) {
+                    console.error(err);
+                    vscode.window.showErrorMessage('Unable to read directory.');
+                }
+                else {
+                    console.debug('Directory entries found:', entries.length);
+                    this.terminal.sendText(`cd '${projectRoot}'`);
+                    entries.forEach(entry => {
+                        console.debug('Examining directory entry:', entry);
+                        if (entry.isDirectory()) {
+                            if (utility_1.SYNC_IGNORE.includes(entry.name)) {
+                                console.debug('Skipping directory:', entry.name);
+                            }
+                            else {
+                                console.debug(`${this.pythonBinary} -m mpremote connect ${port} fs cp -r ${entry.name} :`);
+                                this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs cp -r ${entry.name} :`);
+                            }
+                        }
+                        else {
+                            console.debug(`${this.pythonBinary} -m mpremote connect ${port} fs cp ${entry.name} :`);
+                            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs cp ${entry.name} :`);
+                        }
+                    });
+                }
+            });
+        }
     }
     upload(port, localPath, remotePath) {
         if (port !== undefined) {

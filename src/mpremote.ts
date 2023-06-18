@@ -1,5 +1,7 @@
 import * as vscode from 'vscode';
 import * as childProcess from 'child_process';
+import { readdir } from 'fs';
+import { SYNC_IGNORE } from './utility';
 
 export class MPRemote {
     terminal;
@@ -77,13 +79,13 @@ export class MPRemote {
 
     mkdir(port: string | undefined, dirpath: string) {
         if (port !== undefined) {
-		    this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs mkdir ${dirpath}`);
+            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs mkdir ${dirpath}`);
         }
     }
 
     repl(port: string | undefined) {
         if (port !== undefined) {
-		    this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} repl`);
+            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} repl`);
         }
         else {
             this.terminal.sendText(`${this.pythonBinary} -m mpremote repl`);
@@ -92,7 +94,7 @@ export class MPRemote {
 
     reset(port: string | undefined) {
         if (port !== undefined) {
-		    this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} reset`);
+            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} reset`);
         }
     }
 
@@ -116,7 +118,7 @@ export class MPRemote {
 
     setrtc(port: string | undefined) {
         if (port !== undefined) {
-		    this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} setrtc`);
+            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} setrtc`);
         }
         else {
             this.terminal.sendText(`${this.pythonBinary} -m mpremote setrtc`);
@@ -124,8 +126,36 @@ export class MPRemote {
     }
 
     sync(port: string, projectRoot: string) {
-        console.debug("Sync it up, Kris! I'm about to.");
-        this.terminal.sendText(`cd '${projectRoot}'`);
+        if (port !== undefined) {
+            console.debug("Sync it up, Kris! I'm about to.");
+            this.terminal.sendText(`cd '${projectRoot}'`);
+            readdir(projectRoot, { withFileTypes: true }, (err, entries) => {
+                if (err) {
+                    console.error(err);
+                    vscode.window.showErrorMessage('Unable to read directory.');
+                }
+                else {
+                    console.debug('Directory entries found:', entries.length);
+                    this.terminal.sendText(`cd '${projectRoot}'`);
+                    entries.forEach(entry => {
+                        console.debug('Examining directory entry:', entry);
+                        if (entry.isDirectory()) {
+                            if (SYNC_IGNORE.includes(entry.name)) {
+                                console.debug('Skipping directory:', entry.name);
+                            }
+                            else {
+                                console.debug(`${this.pythonBinary} -m mpremote connect ${port} fs cp -r ${entry.name} :`);
+                                this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs cp -r ${entry.name} :`);
+                            }
+                        }
+                        else {
+                            console.debug(`${this.pythonBinary} -m mpremote connect ${port} fs cp ${entry.name} :`);
+                            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs cp ${entry.name} :`);
+                        }
+                    });
+                }
+            });
+        }
     }
 
     upload(port: string, localPath: string, remotePath: string) {
