@@ -48,6 +48,9 @@ PATCH = extension version
 
 ## Release Notes
 
+### 1.20.14
+Fixes to run and upload commands. Menu cleanup.
+
 ### 1.20.13
 The "Born under a bad sign" release, with apologies to Albert King. Fixed
 missing code in the 'sync' command. Cleaned up string checking.
