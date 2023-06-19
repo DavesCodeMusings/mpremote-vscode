@@ -330,26 +330,19 @@ export async function activate(context: vscode.ExtensionContext) {
 			});
 	}));
 
+	/*
+	 *  Run a file from the local filesystem on the remote device.
+	 */
 	context.subscriptions.push(vscode.commands.registerCommand('mpremote.run', async (args) => {
-		if (!vscode.window.activeTextEditor) {
-			vscode.window.showErrorMessage('No active editor window. Nothing to run.');
+		if (args === undefined || args.fsPath === undefined) {
+			vscode.window.showErrorMessage('Nothing to run.');
 		}
 		else {
-			let port: string = '';
-			if (args === undefined || args.label === undefined) {
-				port = await getDevicePort(serialPortDataProvider.getPortNames());
+			if (vscode.window.activeTextEditor && (vscode.window.activeTextEditor.document.isUntitled || vscode.window.activeTextEditor.document.isDirty)) {
+				vscode.window.showWarningMessage('Unsaved changes exist. Results may not be inconsistent.');
 			}
-			else {
-				port = args.label;
-			}
-
-			if (vscode.window.activeTextEditor.document.isUntitled || vscode.window.activeTextEditor.document.isDirty) {
-				vscode.window.showErrorMessage('You must save changes locally before running.');
-			}
-			else {
-				let filepath = vscode.window.activeTextEditor.document.uri.fsPath;
-				mpremote.run(port, filepath);
-			}
+			let port = await getDevicePort(serialPortDataProvider.getPortNames());
+			mpremote.run(port, args.fsPath);
 		}
 	}));
 
@@ -388,35 +381,26 @@ export async function activate(context: vscode.ExtensionContext) {
 	}));
 
 	/*
-	 *  Upload the file in the active editor to the microcontroller into the microcontroller's current working dir.
+	 *  Upload a local file into the microcontroller's current working dir.
 	 */
 	context.subscriptions.push(vscode.commands.registerCommand('mpremote.upload', async (args) => {
-		if (!vscode.window.activeTextEditor) {
-			vscode.window.showErrorMessage('No active editor window. Nothing to upload.');
+		if (args === undefined || args.fsPath === undefined) {
+			vscode.window.showErrorMessage('Nothing to upload.');
 		}
 		else {
-			let port: string = '';
-			if (args === undefined || args.label === undefined) {
-				port = await getDevicePort(serialPortDataProvider.getPortNames());
+			if (vscode.window.activeTextEditor && (vscode.window.activeTextEditor.document.isUntitled || vscode.window.activeTextEditor.document.isDirty)) {
+				vscode.window.showWarningMessage('Unsaved changes exist. Results may not be inconsistent.');
 			}
-			else {
-				port = args.label;
+			let port = await getDevicePort(serialPortDataProvider.getPortNames());
+			let localPath = args.fsPath;
+			console.debug('Local file:', localPath);
+			let cwd = remoteWorkingDir.get(port) || remoteWorkingDir.get('default');
+			if (cwd.endsWith('/') === false) {
+				cwd += '/';
 			}
-
-			if (vscode.window.activeTextEditor.document.isUntitled || vscode.window.activeTextEditor.document.isDirty) {
-				vscode.window.showErrorMessage('You must save changes locally before uploading.');
-			}
-			else {
-				let localPath = vscode.window.activeTextEditor.document.uri.fsPath;
-				console.debug('Local file:', localPath);
-				let cwd = remoteWorkingDir.get(port) || remoteWorkingDir.get('default');
-				if (cwd.endsWith('/') === false) {
-					cwd += '/';
-				}
-				let remotePath = cwd + pathBasename(localPath);
-				console.debug('Remote file:', remotePath);
-				mpremote.upload(port, localPath, remotePath);
-			}
+			let remotePath = cwd + pathBasename(localPath);
+			console.debug('Remote file:', remotePath);
+			mpremote.upload(port, localPath, remotePath);
 		}
 	}));
 }

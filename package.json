@@ -28,7 +28,7 @@
       {
         "command": "mpremote.cat",
         "category": "MPRemote",
-        "title": "Show contents of a file (cat)",
+        "title": "Show contents of a remote file (cat)",
         "icon": "$(file-text)"
       },
       {
@@ -51,7 +51,7 @@
       },
       {
         "command": "mpremote.exec",
-        "title": "Run a Python statement on the device (exec)",
+        "title": "Run a Python statement on remote device (exec)",
         "category": "MPRemote",
         "icon": "$(run)"
       },
@@ -63,7 +63,7 @@
       {
         "command": "mpremote.mipInstall",
         "category": "MPRemote",
-         "title": "Install a package on device (mip)",
+         "title": "Install a package on remote filesystem (mip)",
          "icon": "$(package)"
       },
       {
@@ -98,7 +98,7 @@
       },
       {
         "command": "mpremote.run",
-        "title": "Run the file shown in the active editor (run)",
+        "title": "Run file on remote device (run)",
         "category": "MPRemote",
         "icon": "$(run)"
       },
@@ -116,7 +116,7 @@
       },
       {
         "command": "mpremote.upload",
-        "title": "Upload file shown in editor to remote filesystem (cp)",
+        "title": "Upload file to remote filesystem (cp)",
         "category": "MPRemote",
         "icon": "$(arrow-up)"
       }
@@ -153,6 +153,13 @@
           "submenu": "mpremote.editorContextSubMenu",
           "group": "mpremote",
           "when": "resourceLangId == python"
+        }
+      ],
+      "explorer/context": [
+        {
+          "submenu": "mpremote.editorContextSubMenu",
+          "group": "mpremote",
+          "when": "resourceLangId == python || resourceExtname == .py"
         }
       ],
       "mpremote.editorContextSubMenu": [
