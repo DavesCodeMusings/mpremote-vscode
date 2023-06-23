@@ -48,6 +48,9 @@ PATCH = extension version
 
 ## Release Notes
 
+### 1.20.15
+Fix to rmdir command. Welcome view for empty Serial Ports.
+
 ### 1.20.14
 Fixes to run and upload commands. Menu cleanup.
 
