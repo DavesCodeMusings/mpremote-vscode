@@ -301,18 +301,23 @@ async function activate(context) {
         let cwd = remoteWorkingDir.get(port) || remoteWorkingDir.get('default');
         (0, utility_1.getRemoteDirEntries)(port, cwd, utility_1.STAT_MASK_DIR)
             .then((subdirs) => {
-            let options = {
-                title: `Choose directory to remove from ${port}:${cwd}`,
-                canSelectMany: false,
-                matchOnDetail: true
-            };
-            vscode.window.showQuickPick(subdirs, options)
-                .then(choice => {
-                if (choice !== undefined) { // undefined when user aborts or selection times out
-                    let doomedDirectory = (0, utility_1.join)(cwd, choice);
-                    mpremote.rmdir(port, doomedDirectory);
-                }
-            });
+            if (subdirs.length === 0) {
+                vscode.window.showInformationMessage(`No subdirectories exist under ${cwd}`);
+            }
+            else {
+                let options = {
+                    title: `Choose directory to remove from ${port}:${cwd}`,
+                    canSelectMany: false,
+                    matchOnDetail: true
+                };
+                vscode.window.showQuickPick(subdirs, options)
+                    .then(choice => {
+                    if (choice !== undefined) { // undefined when user aborts or selection times out
+                        let doomedDirectory = (0, utility_1.join)(cwd, choice);
+                        mpremote.rmdir(port, doomedDirectory);
+                    }
+                });
+            }
         });
     }));
     /*

@@ -315,6 +315,10 @@ export async function activate(context: vscode.ExtensionContext) {
 		let cwd = remoteWorkingDir.get(port) || remoteWorkingDir.get('default');
 		getRemoteDirEntries(port, cwd, STAT_MASK_DIR)
 			.then((subdirs) => {
+				if (subdirs.length === 0) {
+					vscode.window.showInformationMessage(`No subdirectories exist under ${cwd}`);
+				}
+				else {
 				let options = {
 					title: `Choose directory to remove from ${port}:${cwd}`,
 					canSelectMany: false,
@@ -327,6 +331,7 @@ export async function activate(context: vscode.ExtensionContext) {
 							mpremote.rmdir(port, doomedDirectory);
 						}
 					});
+				}
 			});
 	}));
 
