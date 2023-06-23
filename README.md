@@ -48,6 +48,9 @@ PATCH = extension version
 
 ## Release Notes
 
+### 1.20.16
+Add refresh button to serial port welcome view.
+
 ### 1.20.15
 Fix to rmdir command. Welcome view for empty Serial Ports.
 
