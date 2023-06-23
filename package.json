@@ -249,7 +249,14 @@
               "when": "view == serialPortView"
           }
         ]
-    }
+    },
+    "viewsWelcome": [
+      {
+        "view": "serialPortView",
+        "contents": "No serial ports detected. Attach a microcontroller via USB and click the refresh icon above to rescan serial ports.",
+        "when": "workbenchState == empty"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
