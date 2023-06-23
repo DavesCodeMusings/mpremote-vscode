@@ -253,7 +253,7 @@
     "viewsWelcome": [
       {
         "view": "serialPortView",
-        "contents": "No serial ports detected. Attach a microcontroller via USB and click the refresh icon above to rescan serial ports.",
+        "contents": "[Refresh $(refresh)](command:mpremote.refreshSerialPorts)\nAttach a microcontroller and refresh to access MPRemote commands from the context menu.",
         "when": "workbenchState == empty"
       }
     ]
