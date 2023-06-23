@@ -316,7 +316,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		getRemoteDirEntries(port, cwd, STAT_MASK_DIR)
 			.then((subdirs) => {
 				if (subdirs.length === 0) {
-					vscode.window.showInformationMessage(`No subdirectories exist under ${cwd}`);
+					vscode.window.showInformationMessage(`No subdirectories to remove under ${cwd}`);
 				}
 				else {
 				let options = {
