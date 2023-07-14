@@ -4,7 +4,7 @@
   "description": "Command palette access for MicroPython mpremote",
   "icon": "images/snake.png",
   "publisher": "DavesCodeMusings",
-  "version": "1.20.16",
+  "version": "1.20.17",
   "engines": {
     "vscode": "^1.79.0"
   },

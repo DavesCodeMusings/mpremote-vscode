@@ -48,6 +48,10 @@ PATCH = extension version
 
 ## Release Notes
 
+### 1.20.17
+Provide configuration option to skip start-up checks for python binary
+and mpremote module.
+
 ### 1.20.16
 Add refresh button to serial port welcome view.
 
