@@ -48,6 +48,9 @@ PATCH = extension version
 
 ## Release Notes
 
+### 1.20.18
+Bug fix for serial port skip configuration.
+
 ### 1.20.17
 Provide configuration option to skip start-up checks for python binary
 and mpremote module.
