@@ -37,9 +37,9 @@ export class MPRemote {
         }
     }
 
-    cat(port: string, filepath: string) {
+    cat(port: string, filePath: string) {
         if (port) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} cat '${filepath}'`);
+            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} cat '${filePath}'`);
         }
     }
 
@@ -71,9 +71,9 @@ export class MPRemote {
         }
     }
 
-    mkdir(port: string, dirpath: string) {
+    mkdir(port: string, dirPath: string) {
         if (port) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs mkdir '${dirpath}'`);
+            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs mkdir '${dirPath}'`);
         }
     }
 
@@ -89,21 +89,21 @@ export class MPRemote {
         }
     }
 
-    rm(port: string, filepath: string) {
-        if (port && filepath) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs rm ':${filepath}'`);
+    rm(port: string, filePath: string) {
+        if (port && filePath) {
+            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs rm ':${filePath}'`);
         }
     }
 
-    rmdir(port: string, dirpath: string) {
-        if (port && dirpath) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs rmdir ':${dirpath}'`);
+    rmdir(port: string, dirPath: string) {
+        if (port && dirPath) {
+            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs rmdir ':${dirPath}'`);
         }
     }
 
-    run(port: string, filepath: string) {
-        if (port && filepath) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} run '${filepath}'`);
+    run(port: string, filePath: string) {
+        if (port && filePath) {
+            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} run '${filePath}'`);
         }
     }
 

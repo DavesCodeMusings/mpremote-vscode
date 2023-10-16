@@ -33,9 +33,9 @@ class MPRemote {
             }
         }
     }
-    cat(port, filepath) {
+    cat(port, filePath) {
         if (port) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} cat '${filepath}'`);
+            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} cat '${filePath}'`);
         }
     }
     download(port, remotePath, localPath) {
@@ -61,9 +61,9 @@ class MPRemote {
             this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} mip install ${pkg}`);
         }
     }
-    mkdir(port, dirpath) {
+    mkdir(port, dirPath) {
         if (port) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs mkdir '${dirpath}'`);
+            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs mkdir '${dirPath}'`);
         }
     }
     repl(port) {
@@ -76,19 +76,19 @@ class MPRemote {
             this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} reset`);
         }
     }
-    rm(port, filepath) {
-        if (port && filepath) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs rm ':${filepath}'`);
+    rm(port, filePath) {
+        if (port && filePath) {
+            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs rm ':${filePath}'`);
         }
     }
-    rmdir(port, dirpath) {
-        if (port && dirpath) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs rmdir ':${dirpath}'`);
+    rmdir(port, dirPath) {
+        if (port && dirPath) {
+            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs rmdir ':${dirPath}'`);
         }
     }
-    run(port, filepath) {
-        if (port && filepath) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} run '${filepath}'`);
+    run(port, filePath) {
+        if (port && filePath) {
+            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} run '${filePath}'`);
         }
     }
     setrtc(port) {
