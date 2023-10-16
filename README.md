@@ -48,6 +48,9 @@ PATCH = extension version
 
 ## Release Notes
 
+### 1.20.19
+Bug fixes to quote file and dir names containing spaces.
+
 ### 1.20.18
 Bug fix for serial port skip configuration.
 
