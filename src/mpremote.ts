@@ -39,13 +39,13 @@ export class MPRemote {
 
     cat(port: string, filepath: string) {
         if (port) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} cat ${filepath}`);
+            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} cat '${filepath}'`);
         }
     }
 
     download(port: string, remotePath: string, localPath: string) {
         if (port) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} cp :${remotePath} ${localPath}`);
+            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} cp ':${remotePath}' '${localPath}'`);
         }
     }
 
@@ -61,7 +61,7 @@ export class MPRemote {
 
     ls(port: string, dir: string) {
         if (port) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs ls ${dir}`);
+            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs ls '${dir}'`);
         }
     }
 
@@ -73,7 +73,7 @@ export class MPRemote {
 
     mkdir(port: string, dirpath: string) {
         if (port) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs mkdir ${dirpath}`);
+            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs mkdir '${dirpath}'`);
         }
     }
 
@@ -91,13 +91,13 @@ export class MPRemote {
 
     rm(port: string, filepath: string) {
         if (port && filepath) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs rm :${filepath}`);
+            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs rm ':${filepath}'`);
         }
     }
 
     rmdir(port: string, dirpath: string) {
         if (port && dirpath) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs rmdir :${dirpath}`);
+            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs rmdir ':${dirpath}'`);
         }
     }
 
@@ -148,7 +148,7 @@ export class MPRemote {
 
     upload(port: string, localPath: string, remotePath: string) {
         if (port && localPath && remotePath) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} cp ${localPath} :${remotePath}`);
+            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} cp '${localPath}' ':${remotePath}'`);
         }
     }
 }

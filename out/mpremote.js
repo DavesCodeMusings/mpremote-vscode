@@ -35,12 +35,12 @@ class MPRemote {
     }
     cat(port, filepath) {
         if (port) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} cat ${filepath}`);
+            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} cat '${filepath}'`);
         }
     }
     download(port, remotePath, localPath) {
         if (port) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} cp :${remotePath} ${localPath}`);
+            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} cp ':${remotePath}' '${localPath}'`);
         }
     }
     exec(port, codeString) {
@@ -53,7 +53,7 @@ class MPRemote {
     }
     ls(port, dir) {
         if (port) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs ls ${dir}`);
+            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs ls '${dir}'`);
         }
     }
     mipInstall(port, pkg) {
@@ -63,7 +63,7 @@ class MPRemote {
     }
     mkdir(port, dirpath) {
         if (port) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs mkdir ${dirpath}`);
+            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs mkdir '${dirpath}'`);
         }
     }
     repl(port) {
@@ -78,12 +78,12 @@ class MPRemote {
     }
     rm(port, filepath) {
         if (port && filepath) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs rm :${filepath}`);
+            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs rm ':${filepath}'`);
         }
     }
     rmdir(port, dirpath) {
         if (port && dirpath) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs rmdir :${dirpath}`);
+            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs rmdir ':${dirpath}'`);
         }
     }
     run(port, filepath) {
@@ -130,7 +130,7 @@ class MPRemote {
     }
     upload(port, localPath, remotePath) {
         if (port && localPath && remotePath) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} cp ${localPath} :${remotePath}`);
+            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} cp '${localPath}' ':${remotePath}'`);
         }
     }
 }
