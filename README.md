@@ -18,9 +18,9 @@ The extension can be installed from the VS Code Marketplace:
 https://marketplace.visualstudio.com/publishers/DavesCodeMusings
 
 To use the extension:
-1. Open the VS Code command palette (CTRL+SHIFT+P)
-2. Search for MPRemote to find available commands
-3. Profit!
+1. In VS Code, open the folder containing your MicroPython project's files.
+2. Plug in your microcontroller and find it under Serial Ports in VS Code's Explorer pane.
+3. Right-click the microcotroller's serial port to access a menu of MPRemote commands.
 
 ## Requirements
 The host running this extension must have Python 3 installed as well
