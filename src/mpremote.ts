@@ -109,7 +109,7 @@ export class MPRemote {
 
     setrtc(port: string) {
         if (port) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} setrtc`);
+            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} rtc --set`);
         }
     }
 
