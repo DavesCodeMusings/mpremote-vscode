@@ -48,6 +48,9 @@ PATCH = extension version
 
 ## Release Notes
 
+### 1.21.0
+Change made to realtime clock set command.
+
 ### 1.20.19
 Bug fixes to quote file and dir names containing spaces.
 
