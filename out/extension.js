@@ -338,33 +338,38 @@ async function activate(context) {
     /*
      *  Set the time and date on the device's realtime clock to match the host system.
      */
-    context.subscriptions.push(vscode.commands.registerCommand('mpremote.setrtc', (args) => {
-        if (args !== undefined && args.label !== undefined) {
-            let port = args.label;
-            mpremote.setrtc(port);
+    context.subscriptions.push(vscode.commands.registerCommand('mpremote.setrtc', async (args) => {
+        let port = '';
+        if (args === undefined || args.label === undefined) {
+            port = await (0, utility_1.getDevicePort)(serialPortDataProvider.getPortNames());
         }
+        else {
+            port = args.label;
+        }
+        mpremote.setrtc(port);
     }));
     /*
      *  Recursively upload all files from the local project directory to the flash filesystem on the device.
      */
     context.subscriptions.push(vscode.commands.registerCommand('mpremote.sync', async (args) => {
+        let port = '';
         if (args === undefined || args.label === undefined) {
-            vscode.window.showWarningMessage('Cowardly refusing to overwrite files on autodetected microcontroller.');
+            port = await (0, utility_1.getDevicePort)(serialPortDataProvider.getPortNames());
         }
         else {
-            let port = args.label;
-            if (!vscode.workspace.workspaceFolders || vscode.workspace.workspaceFolders.length !== 1) {
-                vscode.window.showErrorMessage('Unable to sync. Open the project folder in the Explorer first.');
-            }
-            else {
-                let projectRoot = vscode.workspace.workspaceFolders[0].uri.fsPath;
-                vscode.window.showInformationMessage(`Overwrite all files on ${port}:/ with local copies from ${projectRoot}?`, "OK", "Cancel")
-                    .then(confirmation => {
-                    if (confirmation === "OK") {
-                        mpremote.sync(port, projectRoot);
-                    }
-                });
-            }
+            port = args.label;
+        }
+        if (!vscode.workspace.workspaceFolders || vscode.workspace.workspaceFolders.length !== 1) {
+            vscode.window.showErrorMessage('Unable to sync. Open the project folder in the Explorer first.');
+        }
+        else {
+            let projectRoot = vscode.workspace.workspaceFolders[0].uri.fsPath;
+            vscode.window.showInformationMessage(`Overwrite all files on ${port}:/ with local copies from ${projectRoot}?`, "OK", "Cancel")
+                .then(confirmation => {
+                if (confirmation === "OK") {
+                    mpremote.sync(port, projectRoot);
+                }
+            });
         }
     }));
     /*
