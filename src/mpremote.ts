@@ -132,13 +132,13 @@ export class MPRemote {
                                 console.debug('Skipping directory:', entry.name);
                             }
                             else {
-                                console.debug(`${this.pythonBinary} -m mpremote connect ${port} fs cp -r ${entry.name} :`);
-                                this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs cp -r ${entry.name} :`);
+                                console.debug(`${this.pythonBinary} -m mpremote connect ${port} fs cp -r '${entry.name}' :`);
+                                this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs cp -r '${entry.name}' :`);
                             }
                         }
                         else {
-                            console.debug(`${this.pythonBinary} -m mpremote connect ${port} fs cp ${entry.name} :`);
-                            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs cp ${entry.name} :`);
+                            console.debug(`${this.pythonBinary} -m mpremote connect ${port} fs cp '${entry.name}' :`);
+                            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs cp '${entry.name}' :`);
                         }
                     });
                 }
