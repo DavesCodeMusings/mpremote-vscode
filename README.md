@@ -48,6 +48,9 @@ PATCH = extension version
 
 ## Release Notes
 
+### 1.21.1
+Bug fixes for sync and setrtc from command palette and sync files with spaces.
+
 ### 1.21.0
 Change made to realtime clock set command.
 
