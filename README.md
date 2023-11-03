@@ -48,6 +48,9 @@ PATCH = extension version
 
 ## Release Notes
 
+### 1.21.2
+Bug fix for unknown local path when run and upload commands are chosen from the palette.
+
 ### 1.21.1
 Bug fixes for sync and setrtc from command palette and sync files with spaces.
 
