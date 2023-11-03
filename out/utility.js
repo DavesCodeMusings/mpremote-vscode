@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDevicePort = exports.getRemoteDirEntries = exports.join = exports.SYNC_IGNORE = exports.STAT_MASK_ALL = exports.STAT_MASK_FILE = exports.STAT_MASK_DIR = void 0;
+exports.getLocalFilePath = exports.getDevicePort = exports.getRemoteDirEntries = exports.join = exports.SYNC_IGNORE = exports.STAT_MASK_ALL = exports.STAT_MASK_FILE = exports.STAT_MASK_DIR = void 0;
 const vscode = require("vscode");
 const child_process_1 = require("child_process");
 exports.STAT_MASK_DIR = 0x4000;
@@ -85,4 +85,28 @@ async function getDevicePort(portList) {
     });
 }
 exports.getDevicePort = getDevicePort;
+/**
+ *  Try to determine the local file path in one of two ways. First, by args passed if there was a right-click
+ *  selection in the file explorer or an editor window. Second, by the properties of the active editor window
+ *  if the command palette was used. Finally, return empty string if both of these methods fail.
+ */
+function getLocalFilePath(args) {
+    let localPath = '';
+    if (args !== undefined && args.fsPath !== undefined) { // user right-clicked upload on a file or editor window
+        localPath = args.fsPath;
+        console.debug('File path determined from context.', localPath);
+    }
+    else if (vscode.window.activeTextEditor) {
+        localPath = vscode.window.activeTextEditor.document.fileName;
+        console.debug('No context given. Defaulting to active editor window path.', localPath);
+        if (vscode.window.activeTextEditor.document.isUntitled || vscode.window.activeTextEditor.document.isDirty) {
+            vscode.window.showWarningMessage('Unsaved changes exist. Results may be inconsistent.');
+        }
+    }
+    else {
+        vscode.window.showErrorMessage('Cannot determine file path. Open file in active editor window first.');
+    }
+    return localPath;
+}
+exports.getLocalFilePath = getLocalFilePath;
 //# sourceMappingURL=utility.js.map

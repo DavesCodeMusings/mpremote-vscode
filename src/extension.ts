@@ -3,7 +3,7 @@
 import * as vscode from 'vscode';
 import { PortListDataProvider } from './serialportExplorer';
 import { MPRemote } from './mpremote';
-import { join, getRemoteDirEntries, getDevicePort, STAT_MASK_DIR, STAT_MASK_FILE } from './utility';
+import { join, getRemoteDirEntries, getDevicePort, getLocalFilePath, STAT_MASK_DIR, STAT_MASK_FILE } from './utility';
 import { join as pathJoin, basename as pathBasename } from 'path';
 
 // Track the remote device's working directory for devices. Used by commands like cp, ls, and rm.
@@ -339,15 +339,11 @@ export async function activate(context: vscode.ExtensionContext) {
 	 *  Run a file from the local filesystem on the remote device.
 	 */
 	context.subscriptions.push(vscode.commands.registerCommand('mpremote.run', async (args) => {
-		if (args === undefined || args.fsPath === undefined) {
-			vscode.window.showErrorMessage('Nothing to run.');
-		}
-		else {
-			if (vscode.window.activeTextEditor && (vscode.window.activeTextEditor.document.isUntitled || vscode.window.activeTextEditor.document.isDirty)) {
-				vscode.window.showWarningMessage('Unsaved changes exist. Results may not be inconsistent.');
-			}
+		let localPath = getLocalFilePath(args);
+		console.debug('Local file:', localPath);
+		if (localPath) {
 			let port = await getDevicePort(serialPortDataProvider.getPortNames());
-			mpremote.run(port, args.fsPath);
+			mpremote.run(port, localPath);
 		}
 	}));
 
@@ -394,15 +390,10 @@ export async function activate(context: vscode.ExtensionContext) {
 	 *  Upload a local file into the microcontroller's current working dir.
 	 */
 	context.subscriptions.push(vscode.commands.registerCommand('mpremote.upload', async (args) => {
-		if (args === undefined || args.fsPath === undefined) {
-			vscode.window.showErrorMessage('Nothing to upload.');
-		}
-		else {
-			if (vscode.window.activeTextEditor && (vscode.window.activeTextEditor.document.isUntitled || vscode.window.activeTextEditor.document.isDirty)) {
-				vscode.window.showWarningMessage('Unsaved changes exist. Results may be inconsistent.');
-			}
+		let localPath = getLocalFilePath(args);
+		console.debug('Local file:', localPath);
+		if (localPath) {
 			let port = await getDevicePort(serialPortDataProvider.getPortNames());
-			let localPath = args.fsPath;
 			console.debug('Local file:', localPath);
 			let cwd = remoteWorkingDir.get(port) || remoteWorkingDir.get('default');
 			if (cwd.endsWith('/') === false) {

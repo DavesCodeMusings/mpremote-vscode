@@ -324,15 +324,11 @@ async function activate(context) {
      *  Run a file from the local filesystem on the remote device.
      */
     context.subscriptions.push(vscode.commands.registerCommand('mpremote.run', async (args) => {
-        if (args === undefined || args.fsPath === undefined) {
-            vscode.window.showErrorMessage('Nothing to run.');
-        }
-        else {
-            if (vscode.window.activeTextEditor && (vscode.window.activeTextEditor.document.isUntitled || vscode.window.activeTextEditor.document.isDirty)) {
-                vscode.window.showWarningMessage('Unsaved changes exist. Results may not be inconsistent.');
-            }
+        let localPath = (0, utility_1.getLocalFilePath)(args);
+        console.debug('Local file:', localPath);
+        if (localPath) {
             let port = await (0, utility_1.getDevicePort)(serialPortDataProvider.getPortNames());
-            mpremote.run(port, args.fsPath);
+            mpremote.run(port, localPath);
         }
     }));
     /*
@@ -376,15 +372,10 @@ async function activate(context) {
      *  Upload a local file into the microcontroller's current working dir.
      */
     context.subscriptions.push(vscode.commands.registerCommand('mpremote.upload', async (args) => {
-        if (args === undefined || args.fsPath === undefined) {
-            vscode.window.showErrorMessage('Nothing to upload.');
-        }
-        else {
-            if (vscode.window.activeTextEditor && (vscode.window.activeTextEditor.document.isUntitled || vscode.window.activeTextEditor.document.isDirty)) {
-                vscode.window.showWarningMessage('Unsaved changes exist. Results may not be inconsistent.');
-            }
+        let localPath = (0, utility_1.getLocalFilePath)(args);
+        console.debug('Local file:', localPath);
+        if (localPath) {
             let port = await (0, utility_1.getDevicePort)(serialPortDataProvider.getPortNames());
-            let localPath = args.fsPath;
             console.debug('Local file:', localPath);
             let cwd = remoteWorkingDir.get(port) || remoteWorkingDir.get('default');
             if (cwd.endsWith('/') === false) {
