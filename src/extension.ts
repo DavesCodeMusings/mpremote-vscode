@@ -399,7 +399,7 @@ export async function activate(context: vscode.ExtensionContext) {
 		}
 		else {
 			if (vscode.window.activeTextEditor && (vscode.window.activeTextEditor.document.isUntitled || vscode.window.activeTextEditor.document.isDirty)) {
-				vscode.window.showWarningMessage('Unsaved changes exist. Results may not be inconsistent.');
+				vscode.window.showWarningMessage('Unsaved changes exist. Results may be inconsistent.');
 			}
 			let port = await getDevicePort(serialPortDataProvider.getPortNames());
 			let localPath = args.fsPath;
