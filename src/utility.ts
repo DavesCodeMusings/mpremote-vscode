@@ -8,8 +8,8 @@ export const STAT_MASK_ALL = 0xFFFF;
 export const SYNC_IGNORE = ['.git'];  // prevent uploading source control dirs to flash
 
 /**
- * Join file path components using forward slash separator. Because path.join() on Windows will
- * try to use a backslash.
+ * Join file path components using forward slash separator. Because the Windows
+ * version of path.join() will try to use a backslash.
  */
 export function join(...args: string[]) {
 	let path = '';
@@ -56,6 +56,10 @@ export async function getRemoteDirEntries(port: string, dir: string, mask = STAT
     });
 }
 
+/**
+ * Determine the serial port used to communicate with the microcontroller. If
+ * multiple ports are found, prompt the user to select one of them.
+ */
 export async function getDevicePort(portList: string[]): Promise<string> {
     let options = {
         title: 'Select device',
@@ -87,9 +91,11 @@ export async function getDevicePort(portList: string[]): Promise<string> {
 }
 
 /**
- *  Try to determine the local file path in one of two ways. First, by args passed if there was a right-click
- *  selection in the file explorer or an editor window. Second, by the properties of the active editor window
- *  if the command palette was used. Finally, return empty string if both of these methods fail.
+ *  Try to determine the local file path in one of two ways. First, by args
+ *  passed if there was a right-click selection in the file explorer or an
+ *  editor window. Second, by the properties of the active editor window if
+ *  the command palette was used. Finally, return empty string if both of
+ *  these methods fail.
  */
 export function getLocalFilePath(args: any) {
     let localPath = '';
