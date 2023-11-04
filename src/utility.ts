@@ -30,12 +30,15 @@ export function join(...args: string[]) {
  */
 export async function getRemoteDirEntries(port: string, dir: string, mask = STAT_MASK_ALL): Promise<string[]> {
     let cwd = dir;
+    let pythonBinary = 'py.exe';  // Assume this is a Windows system for now.
+    if (process.platform !== 'win32') {  // win32 is returned for 64-bit OS as well
+        pythonBinary = 'python';
+    }
+    console.debug('Using Python executable:', pythonBinary);
     console.debug('Gathering directory entries for', cwd, 'on device at', port);
     return new Promise((resolve, reject) => {
         let oneLiner = `from os import listdir, stat ; print([entry for entry in listdir('${cwd}') if stat('${cwd}' + '/' + entry)[0] & ${mask} != 0])`;
-
-        // TODO: fix hard-coded py.exe
-        let listDirCmd = `py.exe -m mpremote connect ${port} exec "${oneLiner}"`;
+        let listDirCmd = `${pythonBinary} -m mpremote connect ${port} exec "${oneLiner}"`;
         console.debug(`Running ${listDirCmd}`);
         exec(listDirCmd, (err, output) => {
             if (err) {
