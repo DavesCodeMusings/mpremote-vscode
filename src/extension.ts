@@ -319,18 +319,18 @@ export async function activate(context: vscode.ExtensionContext) {
 					vscode.window.showInformationMessage(`No subdirectories to remove under ${cwd}`);
 				}
 				else {
-				let options = {
-					title: `Choose directory to remove from ${port}:${cwd}`,
-					canSelectMany: false,
-					matchOnDetail: true
-				};
-				vscode.window.showQuickPick(subdirs, options)
-					.then(choice => {
-						if (choice !== undefined) {  // undefined when user aborts or selection times out
-							let doomedDirectory = join(cwd, choice);
-							mpremote.rmdir(port, doomedDirectory);
-						}
-					});
+					let options = {
+						title: `Choose directory to remove from ${port}:${cwd}`,
+						canSelectMany: false,
+						matchOnDetail: true
+					};
+					vscode.window.showQuickPick(subdirs, options)
+						.then(choice => {
+							if (choice !== undefined) {  // undefined when user aborts or selection times out
+								let doomedDirectory = join(cwd, choice);
+								mpremote.rmdir(port, doomedDirectory);
+							}
+						});
 				}
 			});
 	}));
