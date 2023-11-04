@@ -48,6 +48,9 @@ PATCH = extension version
 
 ## Release Notes
 
+### 1.21.3
+Bug fix for remote file/dir selection prompts not working on non-Windows systems.
+
 ### 1.21.2
 Bug fix for unknown local path when run and upload commands are chosen from the palette.
 
