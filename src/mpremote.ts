@@ -8,8 +8,19 @@ export class MPRemote {
     pythonBinary = getPythonExecutableName();
 
     constructor() {
-        this.terminal = vscode.window.createTerminal('mpremote');
-        this.terminal.show(false);  // false here lets the mpremote terminal take focus on startup
+        // Avoid creating multiple mpremote terminals when session restored.
+        let existingTerminal = vscode.window.terminals.find(obj => {
+            return obj.name === 'mpremote';
+        });
+        if (existingTerminal) {
+            console.debug('Reusing existing mpremote terminal.');
+            this.terminal = existingTerminal;
+        }
+        else {
+            console.debug('Creating new mpremote terminal.');
+            this.terminal = vscode.window.createTerminal('mpremote');
+            this.terminal.show(false);  // false here lets the mpremote terminal take focus on startup
+        }
 
         if (vscode.workspace.getConfiguration('mpremote').startupCheck.skip === false) {
             // Python and the mpremote module must be installed for this to work.
