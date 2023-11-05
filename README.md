@@ -48,6 +48,9 @@ PATCH = extension version
 
 ## Release Notes
 
+### 1.21.4
+Bug fix for multiple terminals. Consolidate Python executable O.S. detection.
+
 ### 1.21.3
 Bug fix for remote file/dir selection prompts not working on non-Windows systems.
 
