@@ -1,21 +1,15 @@
 import * as vscode from 'vscode';
 import * as childProcess from 'child_process';
 import { readdir } from 'fs';
-import { SYNC_IGNORE } from './utility';
+import { getPythonExecutableName, SYNC_IGNORE } from './utility';
 
 export class MPRemote {
     terminal;
-    pythonBinary = 'py.exe';  // Assume this is a Windows system for now.
+    pythonBinary = getPythonExecutableName();
 
     constructor() {
         this.terminal = vscode.window.createTerminal('mpremote');
         this.terminal.show(false);  // false here lets the mpremote terminal take focus on startup
-
-        console.debug('Operating System:', process.platform);
-        if (process.platform !== 'win32') {  // win32 is returned for 64-bit OS as well
-            this.pythonBinary = 'python';
-        }
-        console.debug('Using Python executable:', this.pythonBinary);
 
         if (vscode.workspace.getConfiguration('mpremote').startupCheck.skip === false) {
             // Python and the mpremote module must be installed for this to work.

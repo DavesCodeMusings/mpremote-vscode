@@ -7,14 +7,9 @@ const fs_1 = require("fs");
 const utility_1 = require("./utility");
 class MPRemote {
     constructor() {
-        this.pythonBinary = 'py.exe'; // Assume this is a Windows system for now.
+        this.pythonBinary = (0, utility_1.getPythonExecutableName)();
         this.terminal = vscode.window.createTerminal('mpremote');
         this.terminal.show(false); // false here lets the mpremote terminal take focus on startup
-        console.debug('Operating System:', process.platform);
-        if (process.platform !== 'win32') { // win32 is returned for 64-bit OS as well
-            this.pythonBinary = 'python';
-        }
-        console.debug('Using Python executable:', this.pythonBinary);
         if (vscode.workspace.getConfiguration('mpremote').startupCheck.skip === false) {
             // Python and the mpremote module must be installed for this to work.
             try {

@@ -1,12 +1,25 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getLocalFilePath = exports.getDevicePort = exports.getRemoteDirEntries = exports.join = exports.SYNC_IGNORE = exports.STAT_MASK_ALL = exports.STAT_MASK_FILE = exports.STAT_MASK_DIR = void 0;
+exports.getLocalFilePath = exports.getDevicePort = exports.getRemoteDirEntries = exports.join = exports.getPythonExecutableName = exports.SYNC_IGNORE = exports.STAT_MASK_ALL = exports.STAT_MASK_FILE = exports.STAT_MASK_DIR = void 0;
 const vscode = require("vscode");
 const child_process_1 = require("child_process");
 exports.STAT_MASK_DIR = 0x4000;
 exports.STAT_MASK_FILE = 0x8000;
 exports.STAT_MASK_ALL = 0xFFFF;
 exports.SYNC_IGNORE = ['.git']; // prevent uploading source control dirs to flash
+/**
+ *  Use VS Code's knowledge of the underlying operating system to guess what
+ *  name should be used to call the Python executable.
+ */
+function getPythonExecutableName() {
+    let pythonBinary = 'py.exe'; // Assume this is a Windows system for now.
+    if (process.platform !== 'win32') { // win32 is returned for 64-bit OS as well
+        pythonBinary = 'python';
+    }
+    console.debug('Using Python executable:', pythonBinary);
+    return pythonBinary;
+}
+exports.getPythonExecutableName = getPythonExecutableName;
 /**
  * Join file path components using forward slash separator. Because the Windows
  * version of path.join() will try to use a backslash.
@@ -29,12 +42,8 @@ exports.join = join;
  * limited to just directories (STAT_MASK_DIR) or just files (STAT_MASK_FILES)
  */
 async function getRemoteDirEntries(port, dir, mask = exports.STAT_MASK_ALL) {
+    let pythonBinary = getPythonExecutableName();
     let cwd = dir;
-    let pythonBinary = 'py.exe'; // Assume this is a Windows system for now.
-    if (process.platform !== 'win32') { // win32 is returned for 64-bit OS as well
-        pythonBinary = 'python';
-    }
-    console.debug('Using Python executable:', pythonBinary);
     console.debug('Gathering directory entries for', cwd, 'on device at', port);
     return new Promise((resolve, reject) => {
         let oneLiner = `from os import listdir, stat ; print([entry for entry in listdir('${cwd}') if stat('${cwd}' + '/' + entry)[0] & ${mask} != 0])`;
