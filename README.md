@@ -48,6 +48,9 @@ PATCH = extension version
 
 ## Release Notes
 
+### 1.21.5
+Use python3 as the binary for non-Windows systems.
+
 ### 1.21.4
 Bug fix for multiple terminals. Consolidate Python executable O.S. detection.
 

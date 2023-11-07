@@ -14,7 +14,7 @@ export const SYNC_IGNORE = ['.git'];  // prevent uploading source control dirs t
 export function getPythonExecutableName() {
     let pythonBinary = 'py.exe';  // Assume this is a Windows system for now.
     if (process.platform !== 'win32') {  // win32 is returned for 64-bit OS as well
-        pythonBinary = 'python';
+        pythonBinary = 'python3';
     }
     console.debug('Using Python executable:', pythonBinary);
     return pythonBinary;
