@@ -127,3 +127,14 @@ export function getLocalFilePath(args: any) {
     }
     return localPath;
 }
+
+export function getProjectRoot() {
+    let projectRoot: string = "";
+    if (vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length === 1) {
+        projectRoot = vscode.workspace.workspaceFolders[0].uri.fsPath;
+    }
+    else {
+        vscode.window.showErrorMessage('Unable to determine project root. Open a project folder in the Explorer first.');
+    }
+    return projectRoot;
+}

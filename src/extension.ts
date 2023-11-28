@@ -3,7 +3,7 @@
 import * as vscode from 'vscode';
 import { PortListDataProvider } from './serialportExplorer';
 import { MPRemote } from './mpremote';
-import { join, getRemoteDirEntries, getDevicePort, getLocalFilePath, STAT_MASK_DIR, STAT_MASK_FILE } from './utility';
+import { join, getRemoteDirEntries, getDevicePort, getLocalFilePath, getProjectRoot, STAT_MASK_DIR, STAT_MASK_FILE } from './utility';
 import { join as pathJoin, basename as pathBasename } from 'path';
 
 // Track the remote device's working directory for devices. Used by commands like cp, ls, and rm.
@@ -372,11 +372,15 @@ export async function activate(context: vscode.ExtensionContext) {
 		else {
 			port = args.label;
 		}
+		let projectRoot: string = getProjectRoot();
+/*		
 		if (!vscode.workspace.workspaceFolders || vscode.workspace.workspaceFolders.length !== 1) {
 			vscode.window.showErrorMessage('Unable to sync. Open the project folder in the Explorer first.');
 		}
 		else {
 			let projectRoot: string = vscode.workspace.workspaceFolders[0].uri.fsPath;
+*/
+		if (projectRoot) {
 			vscode.window.showInformationMessage(`Overwrite all files on ${port}:/ with local copies from ${projectRoot}?`, "OK", "Cancel")
 				.then(confirmation => {
 					if (confirmation === "OK") {

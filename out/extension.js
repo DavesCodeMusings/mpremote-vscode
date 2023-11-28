@@ -355,11 +355,15 @@ async function activate(context) {
         else {
             port = args.label;
         }
-        if (!vscode.workspace.workspaceFolders || vscode.workspace.workspaceFolders.length !== 1) {
-            vscode.window.showErrorMessage('Unable to sync. Open the project folder in the Explorer first.');
-        }
-        else {
-            let projectRoot = vscode.workspace.workspaceFolders[0].uri.fsPath;
+        let projectRoot = (0, utility_1.getProjectRoot)();
+        /*
+                if (!vscode.workspace.workspaceFolders || vscode.workspace.workspaceFolders.length !== 1) {
+                    vscode.window.showErrorMessage('Unable to sync. Open the project folder in the Explorer first.');
+                }
+                else {
+                    let projectRoot: string = vscode.workspace.workspaceFolders[0].uri.fsPath;
+        */
+        if (projectRoot) {
             vscode.window.showInformationMessage(`Overwrite all files on ${port}:/ with local copies from ${projectRoot}?`, "OK", "Cancel")
                 .then(confirmation => {
                 if (confirmation === "OK") {

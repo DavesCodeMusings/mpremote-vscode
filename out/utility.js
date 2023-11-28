@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getLocalFilePath = exports.getDevicePort = exports.getRemoteDirEntries = exports.join = exports.getPythonExecutableName = exports.SYNC_IGNORE = exports.STAT_MASK_ALL = exports.STAT_MASK_FILE = exports.STAT_MASK_DIR = void 0;
+exports.getProjectRoot = exports.getLocalFilePath = exports.getDevicePort = exports.getRemoteDirEntries = exports.join = exports.getPythonExecutableName = exports.SYNC_IGNORE = exports.STAT_MASK_ALL = exports.STAT_MASK_FILE = exports.STAT_MASK_DIR = void 0;
 const vscode = require("vscode");
 const child_process_1 = require("child_process");
 exports.STAT_MASK_DIR = 0x4000;
@@ -128,4 +128,15 @@ function getLocalFilePath(args) {
     return localPath;
 }
 exports.getLocalFilePath = getLocalFilePath;
+function getProjectRoot() {
+    let projectRoot = "";
+    if (vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length === 1) {
+        projectRoot = vscode.workspace.workspaceFolders[0].uri.fsPath;
+    }
+    else {
+        vscode.window.showErrorMessage('Unable to determine project root. Open a project folder in the Explorer first.');
+    }
+    return projectRoot;
+}
+exports.getProjectRoot = getProjectRoot;
 //# sourceMappingURL=utility.js.map
