@@ -3,7 +3,7 @@
 import * as vscode from 'vscode';
 import { PortListDataProvider } from './serialportExplorer';
 import { MPRemote } from './mpremote';
-import { join, getRemoteDirEntries, getDevicePort, getLocalFilePath, getProjectRoot, STAT_MASK_DIR, STAT_MASK_FILE } from './utility';
+import { join, getRemoteDirEntries, getDevicePort, getLocalFilePath, getLocalRoot, STAT_MASK_DIR, STAT_MASK_FILE } from './utility';
 import { join as pathJoin, basename as pathBasename } from 'path';
 
 // Track the remote device's working directory for devices. Used by commands like cp, ls, and rm.
@@ -372,15 +372,15 @@ export async function activate(context: vscode.ExtensionContext) {
 		else {
 			port = args.label;
 		}
-		let projectRoot: string = getProjectRoot();
-		if (!projectRoot) {
+		let localRoot: string = getLocalRoot();
+		if (!localRoot) {
 			vscode.window.showErrorMessage('Unable to determine project root. Open a project folder in the Explorer first.');
 		}
 		else {
-			vscode.window.showInformationMessage(`Overwrite all files on ${port}:/ with local copies from ${projectRoot}?`, "OK", "Cancel")
+			vscode.window.showInformationMessage(`Overwrite all files on ${port}:/ with local copies from ${localRoot}?`, "OK", "Cancel")
 				.then(confirmation => {
 					if (confirmation === "OK") {
-						mpremote.sync(port, projectRoot);
+						mpremote.sync(port, localRoot);
 					}
 				});
 		}
@@ -396,11 +396,11 @@ export async function activate(context: vscode.ExtensionContext) {
 		if (localPath) {
 			let port = await getDevicePort(serialPortDataProvider.getPortNames());
 			console.debug('Local file:', localPath);
-			let projectRoot: string = getProjectRoot();
+			let localRoot: string = getLocalRoot();
 			let cwd: string = remoteWorkingDir.get(port) || remoteWorkingDir.get('default');
 			let remotePath: string = "";
-			if (projectRoot) {
-				remotePath = pathJoin(cwd, localPath.replace(projectRoot, "").replace(/\\/g, "/"));
+			if (localRoot) {
+				remotePath = pathJoin(cwd, localPath.replace(localRoot, "").replace(/\\/g, "/"));
 			}
 			else {
 				remotePath = pathJoin(cwd, pathBasename(localPath));

@@ -118,18 +118,18 @@ export class MPRemote {
         }
     }
 
-    sync(port: string, projectRoot: string) {
-        if (port && projectRoot) {
+    sync(port: string, localRoot: string) {
+        if (port && localRoot) {
             console.debug("Sync it up, Kris! I'm about to.");
-            this.terminal.sendText(`cd '${projectRoot}'`);
-            readdir(projectRoot, { withFileTypes: true }, (err, entries) => {
+            this.terminal.sendText(`cd '${localRoot}'`);
+            readdir(localRoot, { withFileTypes: true }, (err, entries) => {
                 if (err) {
                     console.error(err);
                     vscode.window.showErrorMessage('Unable to read directory.');
                 }
                 else {
                     console.debug('Directory entries found:', entries.length);
-                    this.terminal.sendText(`cd '${projectRoot}'`);
+                    this.terminal.sendText(`cd '${localRoot}'`);
                     entries.forEach(entry => {
                         console.debug('Examining directory entry:', entry);
                         if (entry.isDirectory()) {

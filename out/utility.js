@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProjectRoot = exports.getLocalFilePath = exports.getDevicePort = exports.getRemoteDirEntries = exports.join = exports.getPythonExecutableName = exports.SYNC_IGNORE = exports.STAT_MASK_ALL = exports.STAT_MASK_FILE = exports.STAT_MASK_DIR = void 0;
+exports.getLocalRoot = exports.getLocalFilePath = exports.getDevicePort = exports.getRemoteDirEntries = exports.join = exports.getPythonExecutableName = exports.SYNC_IGNORE = exports.STAT_MASK_ALL = exports.STAT_MASK_FILE = exports.STAT_MASK_DIR = void 0;
 const vscode = require("vscode");
 const path_1 = require("path");
 const child_process_1 = require("child_process");
@@ -134,16 +134,16 @@ exports.getLocalFilePath = getLocalFilePath;
  *  open folder in VS Code's Explorer. If there is no open folder, return
  *  an empty string.
  */
-function getProjectRoot() {
-    let projectRoot = "";
+function getLocalRoot() {
+    let localRoot = "";
     if (vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length === 1) {
-        projectRoot = vscode.workspace.workspaceFolders[0].uri.fsPath;
+        localRoot = vscode.workspace.workspaceFolders[0].uri.fsPath;
     }
     if (vscode.workspace.getConfiguration('mpremote').srcSubdirectory) {
         console.debug("Appending srcSubdirectory:", vscode.workspace.getConfiguration('mpremote').srcSubdirectory);
-        projectRoot = (0, path_1.join)(projectRoot, vscode.workspace.getConfiguration('mpremote').srcSubdirectory);
+        localRoot = (0, path_1.join)(localRoot, vscode.workspace.getConfiguration('mpremote').srcSubdirectory);
     }
-    return projectRoot;
+    return localRoot;
 }
-exports.getProjectRoot = getProjectRoot;
+exports.getLocalRoot = getLocalRoot;
 //# sourceMappingURL=utility.js.map

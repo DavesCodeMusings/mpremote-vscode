@@ -134,14 +134,14 @@ export function getLocalFilePath(args: any) {
  *  open folder in VS Code's Explorer. If there is no open folder, return
  *  an empty string.
  */
-export function getProjectRoot() {
-    let projectRoot: string = "";
+export function getLocalRoot() {
+    let localRoot: string = "";
     if (vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length === 1) {
-        projectRoot = vscode.workspace.workspaceFolders[0].uri.fsPath;
+        localRoot = vscode.workspace.workspaceFolders[0].uri.fsPath;
     }
     if (vscode.workspace.getConfiguration('mpremote').srcSubdirectory) {
         console.debug("Appending srcSubdirectory:", vscode.workspace.getConfiguration('mpremote').srcSubdirectory);
-        projectRoot = pathJoin(projectRoot, vscode.workspace.getConfiguration('mpremote').srcSubdirectory);
+        localRoot = pathJoin(localRoot, vscode.workspace.getConfiguration('mpremote').srcSubdirectory);
     }
-    return projectRoot;
+    return localRoot;
 }

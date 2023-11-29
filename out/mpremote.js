@@ -102,18 +102,18 @@ class MPRemote {
             this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} rtc --set`);
         }
     }
-    sync(port, projectRoot) {
-        if (port && projectRoot) {
+    sync(port, localRoot) {
+        if (port && localRoot) {
             console.debug("Sync it up, Kris! I'm about to.");
-            this.terminal.sendText(`cd '${projectRoot}'`);
-            (0, fs_1.readdir)(projectRoot, { withFileTypes: true }, (err, entries) => {
+            this.terminal.sendText(`cd '${localRoot}'`);
+            (0, fs_1.readdir)(localRoot, { withFileTypes: true }, (err, entries) => {
                 if (err) {
                     console.error(err);
                     vscode.window.showErrorMessage('Unable to read directory.');
                 }
                 else {
                     console.debug('Directory entries found:', entries.length);
-                    this.terminal.sendText(`cd '${projectRoot}'`);
+                    this.terminal.sendText(`cd '${localRoot}'`);
                     entries.forEach(entry => {
                         console.debug('Examining directory entry:', entry);
                         if (entry.isDirectory()) {
