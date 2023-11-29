@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getProjectRoot = exports.getLocalFilePath = exports.getDevicePort = exports.getRemoteDirEntries = exports.join = exports.getPythonExecutableName = exports.SYNC_IGNORE = exports.STAT_MASK_ALL = exports.STAT_MASK_FILE = exports.STAT_MASK_DIR = void 0;
 const vscode = require("vscode");
+const path_1 = require("path");
 const child_process_1 = require("child_process");
 exports.STAT_MASK_DIR = 0x4000;
 exports.STAT_MASK_FILE = 0x8000;
@@ -137,6 +138,10 @@ function getProjectRoot() {
     let projectRoot = "";
     if (vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length === 1) {
         projectRoot = vscode.workspace.workspaceFolders[0].uri.fsPath;
+    }
+    if (vscode.workspace.getConfiguration('mpremote').srcSubdirectory) {
+        console.debug("Appending srcSubdirectory:", vscode.workspace.getConfiguration('mpremote').srcSubdirectory);
+        projectRoot = (0, path_1.join)(projectRoot, vscode.workspace.getConfiguration('mpremote').srcSubdirectory);
     }
     return projectRoot;
 }

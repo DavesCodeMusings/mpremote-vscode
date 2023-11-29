@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import { join as pathJoin } from 'path';
 import { exec } from 'child_process';
 
 export const STAT_MASK_DIR = 0x4000;
@@ -137,6 +138,10 @@ export function getProjectRoot() {
     let projectRoot: string = "";
     if (vscode.workspace.workspaceFolders && vscode.workspace.workspaceFolders.length === 1) {
         projectRoot = vscode.workspace.workspaceFolders[0].uri.fsPath;
+    }
+    if (vscode.workspace.getConfiguration('mpremote').srcSubdirectory) {
+        console.debug("Appending srcSubdirectory:", vscode.workspace.getConfiguration('mpremote').srcSubdirectory);
+        projectRoot = pathJoin(projectRoot, vscode.workspace.getConfiguration('mpremote').srcSubdirectory);
     }
     return projectRoot;
 }

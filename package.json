@@ -133,6 +133,11 @@
           "type": "boolean",
           "default": false,
           "description": "Skip checks for python binary and mpremote module at start-up. Select this if you use a Python virtual environment to avoid errors."
+        },
+        "mpremote.srcSubdirectory" : {
+          "type": "string",
+          "default": "",
+          "description": "If all your MicroPython files are contained in a subdirectory of your project folder (e.g. src), enter that subdirectory name here. This will be used as the local path for uploads to your microcontroller."
         }
       }
     },
