@@ -373,14 +373,10 @@ export async function activate(context: vscode.ExtensionContext) {
 			port = args.label;
 		}
 		let projectRoot: string = getProjectRoot();
-/*		
-		if (!vscode.workspace.workspaceFolders || vscode.workspace.workspaceFolders.length !== 1) {
-			vscode.window.showErrorMessage('Unable to sync. Open the project folder in the Explorer first.');
+		if (!projectRoot) {
+			vscode.window.showErrorMessage('Unable to determine project root. Open a project folder in the Explorer first.');
 		}
 		else {
-			let projectRoot: string = vscode.workspace.workspaceFolders[0].uri.fsPath;
-*/
-		if (projectRoot) {
 			vscode.window.showInformationMessage(`Overwrite all files on ${port}:/ with local copies from ${projectRoot}?`, "OK", "Cancel")
 				.then(confirmation => {
 					if (confirmation === "OK") {
@@ -394,16 +390,21 @@ export async function activate(context: vscode.ExtensionContext) {
 	 *  Upload a local file into the microcontroller's current working dir.
 	 */
 	context.subscriptions.push(vscode.commands.registerCommand('mpremote.upload', async (args) => {
-		let localPath = getLocalFilePath(args);
+		let localPath: string = getLocalFilePath(args);
 		console.debug('Local file:', localPath);
+
 		if (localPath) {
 			let port = await getDevicePort(serialPortDataProvider.getPortNames());
 			console.debug('Local file:', localPath);
-			let cwd = remoteWorkingDir.get(port) || remoteWorkingDir.get('default');
-			if (cwd.endsWith('/') === false) {
-				cwd += '/';
+			let projectRoot: string = getProjectRoot();
+			let cwd: string = remoteWorkingDir.get(port) || remoteWorkingDir.get('default');
+			let remotePath: string = "";
+			if (projectRoot) {
+				remotePath = pathJoin(cwd, localPath.replace(projectRoot, "").replace(/\\/g, "/"));
 			}
-			let remotePath = cwd + pathBasename(localPath);
+			else {
+				remotePath = pathJoin(cwd, pathBasename(localPath));
+			}
 			console.debug('Remote file:', remotePath);
 			mpremote.upload(port, localPath, remotePath);
 		}

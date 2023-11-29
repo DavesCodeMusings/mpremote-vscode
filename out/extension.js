@@ -356,14 +356,10 @@ async function activate(context) {
             port = args.label;
         }
         let projectRoot = (0, utility_1.getProjectRoot)();
-        /*
-                if (!vscode.workspace.workspaceFolders || vscode.workspace.workspaceFolders.length !== 1) {
-                    vscode.window.showErrorMessage('Unable to sync. Open the project folder in the Explorer first.');
-                }
-                else {
-                    let projectRoot: string = vscode.workspace.workspaceFolders[0].uri.fsPath;
-        */
-        if (projectRoot) {
+        if (!projectRoot) {
+            vscode.window.showErrorMessage('Unable to determine project root. Open a project folder in the Explorer first.');
+        }
+        else {
             vscode.window.showInformationMessage(`Overwrite all files on ${port}:/ with local copies from ${projectRoot}?`, "OK", "Cancel")
                 .then(confirmation => {
                 if (confirmation === "OK") {
@@ -381,11 +377,15 @@ async function activate(context) {
         if (localPath) {
             let port = await (0, utility_1.getDevicePort)(serialPortDataProvider.getPortNames());
             console.debug('Local file:', localPath);
+            let projectRoot = (0, utility_1.getProjectRoot)();
             let cwd = remoteWorkingDir.get(port) || remoteWorkingDir.get('default');
-            if (cwd.endsWith('/') === false) {
-                cwd += '/';
+            let remotePath = "";
+            if (projectRoot) {
+                remotePath = (0, path_1.join)(cwd, localPath.replace(projectRoot, "").replace(/\\/g, "/"));
             }
-            let remotePath = cwd + (0, path_1.basename)(localPath);
+            else {
+                remotePath = (0, path_1.join)(cwd, (0, path_1.basename)(localPath));
+            }
             console.debug('Remote file:', remotePath);
             mpremote.upload(port, localPath, remotePath);
         }
