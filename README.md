@@ -48,6 +48,9 @@ PATCH = extension version
 
 ## Release Notes
 
+### 1.21.6
+Uploading individual files in subdirectories takes local subdirectories into account.
+
 ### 1.21.5
 Use python3 as the binary for non-Windows systems.
 
