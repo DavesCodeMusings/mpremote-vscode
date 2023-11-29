@@ -48,6 +48,9 @@ PATCH = extension version
 
 ## Release Notes
 
+### 1.21.7
+Configuration option for specific local subdir for MicroPython files (e.g. src)
+
 ### 1.21.6
 Uploading individual files in subdirectories takes local subdirectories into account.
 
