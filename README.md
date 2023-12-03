@@ -48,6 +48,9 @@ PATCH = extension version
 
 ## Release Notes
 
+### 1.21.8
+Change how mpremote is called on non-Windows systems.
+
 ### 1.21.7
 Configuration option for specific local subdir for MicroPython files (e.g. src)
 
