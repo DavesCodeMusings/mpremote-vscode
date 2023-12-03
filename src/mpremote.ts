@@ -1,11 +1,11 @@
 import * as vscode from 'vscode';
 import * as childProcess from 'child_process';
 import { readdir } from 'fs';
-import { getPythonExecutableName, SYNC_IGNORE } from './utility';
+import { getMPRemoteName, SYNC_IGNORE } from './utility';
 
 export class MPRemote {
     terminal;
-    pythonBinary = getPythonExecutableName();
+    mpremote = getMPRemoteName();
 
     constructor() {
         // Avoid creating multiple mpremote terminals when session restored.
@@ -25,15 +25,7 @@ export class MPRemote {
         if (vscode.workspace.getConfiguration('mpremote').startupCheck.skip === false) {
             // Python and the mpremote module must be installed for this to work.
             try {
-                let pythonVersion = childProcess.execSync(`${this.pythonBinary} --version`).toString().split('\r\n')[0].split(' ')[1];
-                console.debug('Python version:', pythonVersion);
-            }
-            catch (ex) {
-                vscode.window.showErrorMessage(`Python is not installed or could not be run as ${this.pythonBinary}`);
-            }
-
-            try {
-                let mpremoteVersion = childProcess.execSync(`${this.pythonBinary} -m mpremote version`).toString().split('\r\n')[0].split(' ')[1];
+                let mpremoteVersion = childProcess.execSync(`${this.mpremote} version`).toString().split('\r\n')[0].split(' ')[1];
                 console.debug('mpremote version:', mpremoteVersion);
             }
             catch (ex) {
@@ -44,77 +36,77 @@ export class MPRemote {
 
     cat(port: string, filePath: string) {
         if (port) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} cat '${filePath}'`);
+            this.terminal.sendText(`${this.mpremote} connect ${port} cat '${filePath}'`);
         }
     }
 
     download(port: string, remotePath: string, localPath: string) {
         if (port) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} cp ':${remotePath}' '${localPath}'`);
+            this.terminal.sendText(`${this.mpremote} connect ${port} cp ':${remotePath}' '${localPath}'`);
         }
     }
 
     exec(port: string, codeString: string) {
         if (port) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} exec '${codeString}'`);
+            this.terminal.sendText(`${this.mpremote} connect ${port} exec '${codeString}'`);
         }
     }
 
     listDevs() {
-        this.terminal.sendText(`${this.pythonBinary} -m mpremote devs`);
+        this.terminal.sendText(`${this.mpremote} devs`);
     }
 
     ls(port: string, dir: string) {
         if (port) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs ls '${dir}'`);
+            this.terminal.sendText(`${this.mpremote} connect ${port} fs ls '${dir}'`);
         }
     }
 
     mipInstall(port: string, pkg: string) {
         if (port && pkg) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} mip install ${pkg}`);
+            this.terminal.sendText(`${this.mpremote} connect ${port} mip install ${pkg}`);
         }
     }
 
     mkdir(port: string, dirPath: string) {
         if (port) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs mkdir '${dirPath}'`);
+            this.terminal.sendText(`${this.mpremote} connect ${port} fs mkdir '${dirPath}'`);
         }
     }
 
     repl(port: string) {
         if (port) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} repl`);
+            this.terminal.sendText(`${this.mpremote} connect ${port} repl`);
         }
     }
 
     reset(port: string) {
         if (port) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} reset`);
+            this.terminal.sendText(`${this.mpremote} connect ${port} reset`);
         }
     }
 
     rm(port: string, filePath: string) {
         if (port && filePath) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs rm ':${filePath}'`);
+            this.terminal.sendText(`${this.mpremote} connect ${port} fs rm ':${filePath}'`);
         }
     }
 
     rmdir(port: string, dirPath: string) {
         if (port && dirPath) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs rmdir ':${dirPath}'`);
+            this.terminal.sendText(`${this.mpremote} connect ${port} fs rmdir ':${dirPath}'`);
         }
     }
 
     run(port: string, filePath: string) {
         if (port && filePath) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} run '${filePath}'`);
+            this.terminal.sendText(`${this.mpremote} connect ${port} run '${filePath}'`);
         }
     }
 
     setrtc(port: string) {
         if (port) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} rtc --set`);
+            this.terminal.sendText(`${this.mpremote} connect ${port} rtc --set`);
         }
     }
 
@@ -137,13 +129,13 @@ export class MPRemote {
                                 console.debug('Skipping directory:', entry.name);
                             }
                             else {
-                                console.debug(`${this.pythonBinary} -m mpremote connect ${port} fs cp -r '${entry.name}' :`);
-                                this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs cp -r '${entry.name}' :`);
+                                console.debug(`${this.mpremote} connect ${port} fs cp -r '${entry.name}' :`);
+                                this.terminal.sendText(`${this.mpremote} connect ${port} fs cp -r '${entry.name}' :`);
                             }
                         }
                         else {
-                            console.debug(`${this.pythonBinary} -m mpremote connect ${port} fs cp '${entry.name}' :`);
-                            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} fs cp '${entry.name}' :`);
+                            console.debug(`${this.mpremote} connect ${port} fs cp '${entry.name}' :`);
+                            this.terminal.sendText(`${this.mpremote} connect ${port} fs cp '${entry.name}' :`);
                         }
                     });
                 }
@@ -153,7 +145,7 @@ export class MPRemote {
 
     upload(port: string, localPath: string, remotePath: string) {
         if (port && localPath && remotePath) {
-            this.terminal.sendText(`${this.pythonBinary} -m mpremote connect ${port} cp '${localPath}' ':${remotePath}'`);
+            this.terminal.sendText(`${this.mpremote} connect ${port} cp '${localPath}' ':${remotePath}'`);
         }
     }
 }

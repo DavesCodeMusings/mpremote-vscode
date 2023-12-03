@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getLocalRoot = exports.getLocalFilePath = exports.getDevicePort = exports.getRemoteDirEntries = exports.join = exports.getPythonExecutableName = exports.SYNC_IGNORE = exports.STAT_MASK_ALL = exports.STAT_MASK_FILE = exports.STAT_MASK_DIR = void 0;
+exports.getLocalRoot = exports.getLocalFilePath = exports.getDevicePort = exports.getRemoteDirEntries = exports.join = exports.getMPRemoteName = exports.SYNC_IGNORE = exports.STAT_MASK_ALL = exports.STAT_MASK_FILE = exports.STAT_MASK_DIR = void 0;
 const vscode = require("vscode");
 const path_1 = require("path");
 const child_process_1 = require("child_process");
@@ -12,15 +12,21 @@ exports.SYNC_IGNORE = ['.git']; // prevent uploading source control dirs to flas
  *  Use VS Code's knowledge of the underlying operating system to guess what
  *  name should be used to call the Python executable.
  */
-function getPythonExecutableName() {
-    let pythonBinary = 'py.exe'; // Assume this is a Windows system for now.
-    if (process.platform !== 'win32') { // win32 is returned for 64-bit OS as well
-        pythonBinary = 'python3';
+function getMPRemoteName() {
+    let mpremote = 'python3 -m mpremote';
+    switch (process.platform) {
+        case 'win32': // win32 is returned for 64-bit OS as well
+            mpremote = 'py.exe -m mpremote';
+            break;
+        case 'linux':
+        case 'darwin':
+            mpremote = 'mpremote';
+            break;
     }
-    console.debug('Using Python executable:', pythonBinary);
-    return pythonBinary;
+    console.debug('Calling mpremote as:', mpremote);
+    return mpremote;
 }
-exports.getPythonExecutableName = getPythonExecutableName;
+exports.getMPRemoteName = getMPRemoteName;
 /**
  * Join file path components using forward slash separator. Because the Windows
  * version of path.join() will try to use a backslash.
@@ -43,12 +49,12 @@ exports.join = join;
  * limited to just directories (STAT_MASK_DIR) or just files (STAT_MASK_FILES)
  */
 async function getRemoteDirEntries(port, dir, mask = exports.STAT_MASK_ALL) {
-    let pythonBinary = getPythonExecutableName();
+    let mpremote = getMPRemoteName();
     let cwd = dir;
     console.debug('Gathering directory entries for', cwd, 'on device at', port);
     return new Promise((resolve, reject) => {
         let oneLiner = `from os import listdir, stat ; print([entry for entry in listdir('${cwd}') if stat('${cwd}' + '/' + entry)[0] & ${mask} != 0])`;
-        let listDirCmd = `${pythonBinary} -m mpremote connect ${port} exec "${oneLiner}"`;
+        let listDirCmd = `${mpremote} connect ${port} exec "${oneLiner}"`;
         console.debug(`Running ${listDirCmd}`);
         (0, child_process_1.exec)(listDirCmd, (err, output) => {
             if (err) {

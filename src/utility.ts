@@ -12,13 +12,19 @@ export const SYNC_IGNORE = ['.git'];  // prevent uploading source control dirs t
  *  Use VS Code's knowledge of the underlying operating system to guess what
  *  name should be used to call the Python executable.
  */
-export function getPythonExecutableName() {
-    let pythonBinary = 'py.exe';  // Assume this is a Windows system for now.
-    if (process.platform !== 'win32') {  // win32 is returned for 64-bit OS as well
-        pythonBinary = 'python3';
+export function getMPRemoteName() {
+    let mpremote = 'python3 -m mpremote';
+    switch (process.platform) {
+        case 'win32':  // win32 is returned for 64-bit OS as well
+            mpremote = 'py.exe -m mpremote';
+            break;
+        case 'linux':
+        case 'darwin':
+            mpremote = 'mpremote';
+            break;
     }
-    console.debug('Using Python executable:', pythonBinary);
-    return pythonBinary;
+    console.debug('Calling mpremote as:', mpremote);
+    return mpremote;
 }
 
 /**
@@ -26,16 +32,16 @@ export function getPythonExecutableName() {
  * version of path.join() will try to use a backslash.
  */
 export function join(...args: string[]) {
-	let path = '';
-	for (let i = 0; i < args.length; i++) {
-		if (path.endsWith('/') || args[i].startsWith('/')) {
-			path += args[i];
-		}
-		else {
-			path += '/' + args[i];
-		}
-	}
-	return path;
+    let path = '';
+    for (let i = 0; i < args.length; i++) {
+        if (path.endsWith('/') || args[i].startsWith('/')) {
+            path += args[i];
+        }
+        else {
+            path += '/' + args[i];
+        }
+    }
+    return path;
 }
 
 /**
@@ -43,12 +49,12 @@ export function join(...args: string[]) {
  * limited to just directories (STAT_MASK_DIR) or just files (STAT_MASK_FILES)
  */
 export async function getRemoteDirEntries(port: string, dir: string, mask = STAT_MASK_ALL): Promise<string[]> {
-    let pythonBinary = getPythonExecutableName();
+    let mpremote = getMPRemoteName();
     let cwd = dir;
     console.debug('Gathering directory entries for', cwd, 'on device at', port);
     return new Promise((resolve, reject) => {
         let oneLiner = `from os import listdir, stat ; print([entry for entry in listdir('${cwd}') if stat('${cwd}' + '/' + entry)[0] & ${mask} != 0])`;
-        let listDirCmd = `${pythonBinary} -m mpremote connect ${port} exec "${oneLiner}"`;
+        let listDirCmd = `${mpremote} connect ${port} exec "${oneLiner}"`;
         console.debug(`Running ${listDirCmd}`);
         exec(listDirCmd, (err, output) => {
             if (err) {
@@ -90,15 +96,15 @@ export async function getDevicePort(portList: string[]): Promise<string> {
         }
         else {
             vscode.window.showQuickPick(portList, options)
-            .then(choice => {
-                if (choice !== undefined) {
-                    console.debug('Using device on port:', choice);
-                    resolve(choice);
-                }
-                else {
-                    reject(undefined);
-                }
-            });
+                .then(choice => {
+                    if (choice !== undefined) {
+                        console.debug('Using device on port:', choice);
+                        resolve(choice);
+                    }
+                    else {
+                        reject(undefined);
+                    }
+                });
         }
     });
 }
@@ -121,7 +127,7 @@ export function getLocalFilePath(args: any) {
         console.debug('No context given. Defaulting to active editor window path.', localPath);
         if (vscode.window.activeTextEditor.document.isUntitled || vscode.window.activeTextEditor.document.isDirty) {
             vscode.window.showWarningMessage('Unsaved changes exist. Results may be inconsistent.');
-        }		
+        }
     }
     else {
         vscode.window.showErrorMessage('Cannot determine file path. Open file in active editor window first.');
