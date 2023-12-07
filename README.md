@@ -48,6 +48,9 @@ PATCH = extension version
 
 ## Release Notes
 
+### 1.21.9
+Allow .mpy files to be uploaded/downloaded with context menu.
+
 ### 1.21.8
 Change how mpremote is called on non-Windows systems.
 

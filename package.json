@@ -4,7 +4,7 @@
   "description": "Command palette access for MicroPython mpremote",
   "icon": "images/snake.png",
   "publisher": "DavesCodeMusings",
-  "version": "1.21.8",
+  "version": "1.21.9",
   "engines": {
     "vscode": "^1.79.0"
   },
@@ -154,7 +154,7 @@
       {
         "id": "mpremote.editorContextSubMenu",
         "label": "MPRemote",
-        "when": "resourceLangId == python"
+        "when": "resourceExtname == .mpy || resourceExtname == .py || resourceLangId == python"
       }
     ],
     "menus": {
@@ -162,14 +162,14 @@
         {
           "submenu": "mpremote.editorContextSubMenu",
           "group": "mpremote",
-          "when": "resourceLangId == python"
+          "when": "resourceExtname == .mpy || resourceExtname == .py || resourceLangId == python"
         }
       ],
       "explorer/context": [
         {
           "submenu": "mpremote.editorContextSubMenu",
           "group": "mpremote",
-          "when": "resourceLangId == python || resourceExtname == .py"
+          "when": "resourceExtname == .mpy || resourceExtname == .py || resourceLangId == python"
         }
       ],
       "mpremote.editorContextSubMenu": [
