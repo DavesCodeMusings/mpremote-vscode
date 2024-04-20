@@ -48,6 +48,9 @@ PATCH = extension version
 
 ## Release Notes
 
+### 1.21.10
+Fix serial port skip bug (issue #22). Thanks SteveKerle!
+
 ### 1.21.9
 Allow .mpy files to be uploaded/downloaded with context menu.
 

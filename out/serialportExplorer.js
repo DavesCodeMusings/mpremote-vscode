@@ -19,13 +19,10 @@ class PortListDataProvider {
         console.debug('Detected serial ports:', comPortList);
         console.debug('Serial port skip list:', comPortSkipList);
         this.portList = [];
-        for (let i = 0; i < comPortList.length; i++) {
-            if (comPortSkipList.includes(comPortList[i].path)) {
-                comPortList.splice(i, 1);
-            }
-        }
         comPortList.forEach(port => {
-            this.portList.push(new TreeItem(port.path));
+            if (!comPortSkipList.includes(port.path)) {
+                this.portList.push(new TreeItem(port.path));
+            }
         });
         console.debug('Avaiable serial ports:', this.portList);
         this._onDidChangeTreeData.fire(undefined);
