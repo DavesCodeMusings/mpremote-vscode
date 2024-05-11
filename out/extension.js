@@ -360,10 +360,15 @@ async function activate(context) {
             vscode.window.showErrorMessage('Unable to determine project root. Open a project folder in the Explorer first.');
         }
         else {
-            vscode.window.showInformationMessage(`Overwrite all files on ${port}:/ with local copies from ${localRoot}?`, "OK", "Cancel")
+            let remoteRoot = "/";
+            if (vscode.workspace.getConfiguration('mpremote').useRemoteWorkingDirForSync) {
+                remoteRoot = remoteWorkingDir.get(port) || remoteWorkingDir.get('default');
+            }
+            vscode.window.showInformationMessage(`Overwrite all files on ${port}:${remoteRoot} with local copies from ${localRoot}?`, "OK", "Cancel")
                 .then(confirmation => {
                 if (confirmation === "OK") {
-                    mpremote.sync(port, localRoot);
+                    console.debug('Remote destination:', remoteRoot);
+                    mpremote.sync(port, localRoot, remoteRoot);
                 }
             });
         }

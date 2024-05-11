@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import * as childProcess from 'child_process';
 import { readdir } from 'fs';
-import { getMPRemoteName, SYNC_IGNORE } from './utility';
+import { getMPRemoteName, join, SYNC_IGNORE } from './utility';
 
 export class MPRemote {
     terminal;
@@ -110,7 +110,7 @@ export class MPRemote {
         }
     }
 
-    sync(port: string, localRoot: string) {
+    sync(port: string, localRoot: string, remoteRoot: string) {
         if (port && localRoot) {
             console.debug("Sync it up, Kris! I'm about to.");
             this.terminal.sendText(`cd '${localRoot}'`);
@@ -129,13 +129,13 @@ export class MPRemote {
                                 console.debug('Skipping directory:', entry.name);
                             }
                             else {
-                                console.debug(`${this.mpremote} connect ${port} fs cp -r '${entry.name}' :`);
-                                this.terminal.sendText(`${this.mpremote} connect ${port} fs cp -r '${entry.name}' :`);
+                                console.debug(`${this.mpremote} connect ${port} fs cp -r '${entry.name}' ':${join(remoteRoot, entry.name)}'`);
+                                this.terminal.sendText(`${this.mpremote} connect ${port} fs cp -r '${entry.name}' ':${join(remoteRoot, entry.name)}'`);
                             }
                         }
                         else {
-                            console.debug(`${this.mpremote} connect ${port} fs cp '${entry.name}' :`);
-                            this.terminal.sendText(`${this.mpremote} connect ${port} fs cp '${entry.name}' :`);
+                            console.debug(`${this.mpremote} connect ${port} fs cp '${entry.name}' ':${join(remoteRoot, entry.name)}'`);
+                            this.terminal.sendText(`${this.mpremote} connect ${port} fs cp '${entry.name}' ':${join(remoteRoot, entry.name)}'`);
                         }
                     });
                 }
