@@ -48,6 +48,9 @@ PATCH = extension version
 
 ## Release Notes
 
+### 1.21.11
+Add feature for uploading into a directory other than / (issue #24).
+
 ### 1.21.10
 Fix serial port skip bug (issue #22). Thanks SteveKerle!
 
