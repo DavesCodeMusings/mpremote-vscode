@@ -48,6 +48,9 @@ PATCH = extension version
 
 ## Release Notes
 
+### 1.21.12
+Reverting 1.21.11 changes due to bugs.
+
 ### 1.21.11
 Add feature for uploading into a directory other than / (issue #24).
 
