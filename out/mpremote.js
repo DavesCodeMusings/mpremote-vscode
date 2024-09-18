@@ -95,7 +95,7 @@ class MPRemote {
             this.terminal.sendText(`${this.mpremote} connect ${port} rtc --set`);
         }
     }
-    sync(port, localRoot, remoteRoot) {
+    sync(port, localRoot) {
         if (port && localRoot) {
             console.debug("Sync it up, Kris! I'm about to.");
             this.terminal.sendText(`cd '${localRoot}'`);
@@ -114,13 +114,13 @@ class MPRemote {
                                 console.debug('Skipping directory:', entry.name);
                             }
                             else {
-                                console.debug(`${this.mpremote} connect ${port} fs cp -r '${entry.name}' ':${(0, utility_1.join)(remoteRoot, entry.name)}'`);
-                                this.terminal.sendText(`${this.mpremote} connect ${port} fs cp -r '${entry.name}' ':${(0, utility_1.join)(remoteRoot, entry.name)}'`);
+                                console.debug(`${this.mpremote} connect ${port} fs cp -r '${entry.name}' :`);
+                                this.terminal.sendText(`${this.mpremote} connect ${port} fs cp -r '${entry.name}' :`);
                             }
                         }
                         else {
-                            console.debug(`${this.mpremote} connect ${port} fs cp '${entry.name}' ':${(0, utility_1.join)(remoteRoot, entry.name)}'`);
-                            this.terminal.sendText(`${this.mpremote} connect ${port} fs cp '${entry.name}' ':${(0, utility_1.join)(remoteRoot, entry.name)}'`);
+                            console.debug(`${this.mpremote} connect ${port} fs cp '${entry.name}' :`);
+                            this.terminal.sendText(`${this.mpremote} connect ${port} fs cp '${entry.name}' :`);
                         }
                     });
                 }

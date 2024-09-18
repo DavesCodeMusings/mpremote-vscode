@@ -138,11 +138,6 @@
           "type": "string",
           "default": "",
           "description": "If all your MicroPython files are contained in a subdirectory of your project folder (e.g. src), enter that subdirectory name here. This will be used as the local path for uploads to your microcontroller."
-        },
-        "mpremote.useRemoteWorkingDirForSync": {
-          "type": "boolean",
-          "default": false,
-          "description": "Prepend the path set by Change Remote Working Directory (chdir) for Sync operations. If unchecked, Sync'd files will go into / on the remote device."
         }
       }
     },
