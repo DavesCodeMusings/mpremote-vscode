@@ -48,6 +48,9 @@ PATCH = extension version
 
 ## Release Notes
 
+### 1.21.14
+Enhancement to allow upload of any file type, not just .py (issue #30).
+
 ### 1.21.13
 Fixes path separator problem when uploading (issue #32).
 
