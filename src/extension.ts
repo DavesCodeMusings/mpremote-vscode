@@ -399,10 +399,10 @@ export async function activate(context: vscode.ExtensionContext) {
 			let cwd: string = remoteWorkingDir.get(port) || remoteWorkingDir.get('default');
 			let remotePath: string = "";
 			if (localRoot) {
-				remotePath = pathJoin(cwd, localPath.replace(localRoot, "").replace(/\\/g, "/"));
+				remotePath = pathJoin(cwd, localPath.replace(localRoot, "")).replace(/\\/g, "/");
 			}
 			else {
-				remotePath = pathJoin(cwd, pathBasename(localPath));
+				remotePath = pathJoin(cwd, pathBasename(localPath)).replace(/\\/g, "/");
 			}
 			console.debug('Remote file:', remotePath);
 			mpremote.upload(port, localPath, remotePath);

@@ -381,10 +381,10 @@ async function activate(context) {
             let cwd = remoteWorkingDir.get(port) || remoteWorkingDir.get('default');
             let remotePath = "";
             if (localRoot) {
-                remotePath = (0, path_1.join)(cwd, localPath.replace(localRoot, "").replace(/\\/g, "/"));
+                remotePath = (0, path_1.join)(cwd, localPath.replace(localRoot, "")).replace(/\\/g, "/");
             }
             else {
-                remotePath = (0, path_1.join)(cwd, (0, path_1.basename)(localPath));
+                remotePath = (0, path_1.join)(cwd, (0, path_1.basename)(localPath)).replace(/\\/g, "/");
             }
             console.debug('Remote file:', remotePath);
             mpremote.upload(port, localPath, remotePath);
