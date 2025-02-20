@@ -48,6 +48,9 @@ PATCH = extension version
 
 ## Release Notes
 
+### 1.21.13
+Fixes path separator problem when uploading (issue #32).
+
 ### 1.21.12
 Reverting 1.21.11 changes due to bugs.
 
