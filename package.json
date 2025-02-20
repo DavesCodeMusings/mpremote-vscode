@@ -169,7 +169,7 @@
         {
           "submenu": "mpremote.editorContextSubMenu",
           "group": "mpremote",
-          "when": "resourceExtname == .mpy || resourceExtname == .py || resourceLangId == python"
+          "when": "explorerResourceIsFolder == false"
         }
       ],
       "mpremote.editorContextSubMenu": [
