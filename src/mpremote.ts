@@ -147,4 +147,10 @@ export class MPRemote {
             this.terminal.sendText(`${this.mpremote} connect ${port} cp '${localPath}' ':${remotePath}'`);
         }
     }
+
+    version(port: string) {
+        if (port) {
+            this.terminal.sendText(`${this.mpremote} connect ${port} exec 'from sys import version; print(version)'`);
+        }
+    }
 }

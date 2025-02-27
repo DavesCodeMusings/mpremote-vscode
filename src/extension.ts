@@ -408,6 +408,21 @@ export async function activate(context: vscode.ExtensionContext) {
 			mpremote.upload(port, localPath, remotePath);
 		}
 	}));
+
+	/*
+	 *  Get the version number of the device's MicroPython firmware.
+	 */
+	context.subscriptions.push(vscode.commands.registerCommand('mpremote.version', async (args) => {
+		let port: string = '';
+		if (args === undefined || args.label === undefined) {
+			port = await getDevicePort(serialPortDataProvider.getPortNames());
+		}
+		else {
+			port = args.label;
+		}
+		mpremote.version(port);
+	}));
+
 }
 
 

@@ -390,6 +390,19 @@ async function activate(context) {
             mpremote.upload(port, localPath, remotePath);
         }
     }));
+    /*
+     *  Get the version number of the device's MicroPython firmware.
+     */
+    context.subscriptions.push(vscode.commands.registerCommand('mpremote.version', async (args) => {
+        let port = '';
+        if (args === undefined || args.label === undefined) {
+            port = await (0, utility_1.getDevicePort)(serialPortDataProvider.getPortNames());
+        }
+        else {
+            port = args.label;
+        }
+        mpremote.version(port);
+    }));
 }
 exports.activate = activate;
 // This method is called when your extension is deactivated

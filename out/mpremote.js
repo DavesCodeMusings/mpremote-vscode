@@ -132,6 +132,11 @@ class MPRemote {
             this.terminal.sendText(`${this.mpremote} connect ${port} cp '${localPath}' ':${remotePath}'`);
         }
     }
+    version(port) {
+        if (port) {
+            this.terminal.sendText(`${this.mpremote} connect ${port} exec 'from sys import version; print(version)'`);
+        }
+    }
 }
 exports.MPRemote = MPRemote;
 //# sourceMappingURL=mpremote.js.map

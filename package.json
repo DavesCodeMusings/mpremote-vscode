@@ -4,7 +4,7 @@
   "description": "Command palette access for MicroPython mpremote",
   "icon": "images/snake.png",
   "publisher": "DavesCodeMusings",
-  "version": "1.21.14",
+  "version": "1.21.15",
   "engines": {
     "vscode": "^1.79.0"
   },
@@ -119,6 +119,11 @@
         "title": "Upload file to remote filesystem (cp)",
         "category": "MPRemote",
         "icon": "$(arrow-up)"
+      },
+      {
+        "command": "mpremote.version",
+        "title": "Get MicroPython firmware version",
+        "category": "MPRemote"
       }
     ],
     "configuration": {
@@ -256,6 +261,11 @@
           {
               "command": "mpremote.sync",
               "group": "1_fileGroup@5",
+              "when": "view == serialPortView"
+          },
+          {
+              "command": "mpremote.version",
+              "group": "3_deviceGroup@6",
               "when": "view == serialPortView"
           }
         ]
