@@ -1,6 +1,6 @@
 import * as vscode from 'vscode';
 import { join as pathJoin } from 'path';
-import { exec } from 'child_process';
+import { exec, execSync } from 'child_process';
 
 export const STAT_MASK_DIR = 0x4000;
 export const STAT_MASK_FILE = 0x8000;
@@ -73,6 +73,36 @@ export async function getRemoteDirEntries(port: string, dir: string, mask = STAT
             }
         });
     });
+}
+
+/**
+ * Return an array containing serial ports detected by mpremote. Array
+ * elements are objects, similar to what is returned by the JavaScript
+ * SerialPort library. This function should serve as a drop-in replacement.
+ * The path property will be something like: '/dev/ttyS0' for Linux or
+ * 'COM3' for Windows. The rest of the info is included for completeness,
+ * but not used by this extension.
+ */
+export function getSerialPortList() {
+    interface SerialPort {
+        path: string,
+        serialNumber: string,
+        pnpId: string,
+        manufacturer: string,
+        product: string
+    }
+    let ports: SerialPort[] = [];
+    let mpremote = getMPRemoteName();
+    let devsOutput = execSync(`${mpremote} devs`).toString().split('\r\n');
+    devsOutput.forEach(line => {
+        if (line) {
+            let [path, serialNumber, pnpId, manufacturer, product] = line.split(" ");
+            if (path) {
+                ports.push({path: path, serialNumber: serialNumber, pnpId: pnpId, manufacturer: manufacturer, product: product});
+            }
+        }
+    });
+    return ports;
 }
 
 /**

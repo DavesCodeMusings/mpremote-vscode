@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PortListDataProvider = void 0;
 const vscode = require("vscode");
-const serialport_1 = require("serialport");
+const utility_1 = require("./utility");
 class TreeItem extends vscode.TreeItem {
 }
 class PortListDataProvider {
@@ -14,7 +14,7 @@ class PortListDataProvider {
     }
     // Always call refresh() immediately after creating an instance of PortListDataProvider to populate the list of available ports.
     async refresh() {
-        let comPortList = await serialport_1.SerialPort.list();
+        let comPortList = (0, utility_1.getSerialPortList)();
         let comPortSkipList = vscode.workspace.getConfiguration('mpremote').serialPort.skip.replace(/\s/g, '').split(',');
         console.debug('Detected serial ports:', comPortList);
         console.debug('Serial port skip list:', comPortSkipList);

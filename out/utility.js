@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getLocalRoot = exports.getLocalFilePath = exports.getDevicePort = exports.getRemoteDirEntries = exports.join = exports.getMPRemoteName = exports.SYNC_IGNORE = exports.STAT_MASK_ALL = exports.STAT_MASK_FILE = exports.STAT_MASK_DIR = void 0;
+exports.getLocalRoot = exports.getLocalFilePath = exports.getDevicePort = exports.getSerialPortList = exports.getRemoteDirEntries = exports.join = exports.getMPRemoteName = exports.SYNC_IGNORE = exports.STAT_MASK_ALL = exports.STAT_MASK_FILE = exports.STAT_MASK_DIR = void 0;
 const vscode = require("vscode");
 const path_1 = require("path");
 const child_process_1 = require("child_process");
@@ -75,6 +75,29 @@ async function getRemoteDirEntries(port, dir, mask = exports.STAT_MASK_ALL) {
     });
 }
 exports.getRemoteDirEntries = getRemoteDirEntries;
+/**
+ * Return an array containing serial ports detected by mpremote. Array
+ * elements are objects, similar to what is returned by the JavaScript
+ * SerialPort library. This function should serve as a drop-in replacement.
+ * The path property will be something like: '/dev/ttyS0' for Linux or
+ * 'COM3' for Windows. The rest of the info is included for completeness,
+ * but not used by this extension.
+ */
+function getSerialPortList() {
+    let ports = [];
+    let mpremote = getMPRemoteName();
+    let devsOutput = (0, child_process_1.execSync)(`${mpremote} devs`).toString().split('\r\n');
+    devsOutput.forEach(line => {
+        if (line) {
+            let [path, serialNumber, pnpId, manufacturer, product] = line.split(" ");
+            if (path) {
+                ports.push({ path: path, serialNumber: serialNumber, pnpId: pnpId, manufacturer: manufacturer, product: product });
+            }
+        }
+    });
+    return ports;
+}
+exports.getSerialPortList = getSerialPortList;
 /**
  * Determine the serial port used to communicate with the microcontroller. If
  * multiple ports are found, prompt the user to select one of them.

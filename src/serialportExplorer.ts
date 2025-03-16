@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { SerialPort } from 'serialport';
+import { getSerialPortList } from './utility';
 
 class TreeItem extends vscode.TreeItem {
   children: TreeItem[] | undefined;
@@ -18,7 +18,7 @@ export class PortListDataProvider implements vscode.TreeDataProvider<TreeItem> {
 
     // Always call refresh() immediately after creating an instance of PortListDataProvider to populate the list of available ports.
     async refresh() {
-        let comPortList = await SerialPort.list();
+        let comPortList = getSerialPortList();
         let comPortSkipList = vscode.workspace.getConfiguration('mpremote').serialPort.skip.replace(/\s/g, '').split(',');
         console.debug('Detected serial ports:', comPortList);
         console.debug('Serial port skip list:', comPortSkipList);
