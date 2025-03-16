@@ -48,6 +48,9 @@ PATCH = extension version
 
 ## Release Notes
 
+### 1.21.16
+Remove SerialPort dependency and use mpremote devs instead (issue #29).
+
 ### 1.21.15
 Enhancement to show MicroPython firmware version on device (issue #26).
 
