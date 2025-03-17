@@ -9,19 +9,24 @@ exports.STAT_MASK_FILE = 0x8000;
 exports.STAT_MASK_ALL = 0xFFFF;
 exports.SYNC_IGNORE = ['.git']; // prevent uploading source control dirs to flash
 /**
- *  Use VS Code's knowledge of the underlying operating system to guess what
- *  name should be used to call the Python executable.
+ *  Look up the user configured way of calling mpremote for the system. If
+ *  not explicitly configured, make an educated guess based on the operating
+ *  system.
  */
 function getMPRemoteName() {
-    let mpremote = 'python3 -m mpremote';
-    switch (process.platform) {
-        case 'win32': // win32 is returned for 64-bit OS as well
-            mpremote = 'py.exe -m mpremote';
-            break;
-        case 'linux':
-        case 'darwin':
-            mpremote = 'mpremote';
-            break;
+    let mpremote = vscode.workspace.getConfiguration('mpremote').command;
+    if (!mpremote) {
+        switch (process.platform) {
+            case 'win32': // win32 is returned for 64-bit OS as well
+                mpremote = 'py.exe -m mpremote';
+                break;
+            case 'linux':
+            case 'darwin':
+                mpremote = 'mpremote';
+                break;
+            default:
+                mpremote = 'python3 -m mpremote';
+        }
     }
     console.debug('Calling mpremote as:', mpremote);
     return mpremote;

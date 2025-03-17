@@ -129,6 +129,11 @@
     "configuration": {
       "title": "MPRemote",
       "properties": {
+        "mpremote.command": {
+          "type": "string",
+          "default": "",
+          "description": "If mpremote is not running correctly in the extension (as 'py.exe -m mpremote', 'python3 -m mpremote', or 'mpremote'), enter its custom command here and restart VS Code."
+        },
         "mpremote.serialPort.skip": {
           "type": "string",
           "default": "",
