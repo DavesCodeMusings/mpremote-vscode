@@ -48,6 +48,9 @@ PATCH = extension version
 
 ## Release Notes
 
+### 1.21.17
+Enhancement to allow overriding mpremote command invocation with config setting (issue #31).
+
 ### 1.21.16
 Remove SerialPort dependency and use mpremote devs instead (issue #29).
 
