@@ -48,6 +48,9 @@ PATCH = extension version
 
 ## Release Notes
 
+### 1.21.18
+Enhancement to add the `df` command to show flash file system usage (issue #34).
+
 ### 1.21.17
 Enhancement to allow overriding mpremote command invocation with config setting (issue #31).
 
