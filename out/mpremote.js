@@ -37,6 +37,11 @@ class MPRemote {
             this.terminal.sendText(`${this.mpremote} connect ${port} cat '${filePath}'`);
         }
     }
+    df(port) {
+        if (port) {
+            this.terminal.sendText(`${this.mpremote} connect ${port} df`);
+        }
+    }
     download(port, remotePath, localPath) {
         if (port) {
             this.terminal.sendText(`${this.mpremote} connect ${port} cp ':${remotePath}' '${localPath}'`);

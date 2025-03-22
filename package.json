@@ -38,6 +38,12 @@
         "icon": "$(file-directory)"
       },
       {
+        "command": "mpremote.df",
+        "category": "MPRemote",
+        "title": "Show flash file system usage (df)",
+        "icon": "$(file-binary)"
+      },
+      {
         "command": "mpremote.devs",
         "category": "MPRemote",
         "title": "Show attached device info (devs)",
@@ -214,6 +220,11 @@
               "when": "view == serialPortView"
           },
           {
+            "command": "mpremote.df",
+            "group": "1_fileGroup@3",
+            "when": "view == serialPortView"
+        },
+        {
             "command": "mpremote.download",
             "group": "1_fileGroup@2",
             "when": "view == serialPortView"
@@ -225,7 +236,7 @@
           },
           {
               "command": "mpremote.ls",
-              "group": "1_fileGroup@3",
+              "group": "1_fileGroup@4",
               "when": "view == serialPortView"
           },
           {
@@ -250,7 +261,7 @@
           },
           {
             "command": "mpremote.rm",
-            "group": "1_fileGroup@4",
+            "group": "1_fileGroup@5",
             "when": "view == serialPortView"
           },
           {
@@ -265,7 +276,7 @@
           },
           {
               "command": "mpremote.sync",
-              "group": "1_fileGroup@5",
+              "group": "1_fileGroup@6",
               "when": "view == serialPortView"
           },
           {

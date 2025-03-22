@@ -40,6 +40,12 @@ export class MPRemote {
         }
     }
 
+    df(port: string) {
+        if (port) {
+            this.terminal.sendText(`${this.mpremote} connect ${port} df`);
+        }
+    }
+
     download(port: string, remotePath: string, localPath: string) {
         if (port) {
             this.terminal.sendText(`${this.mpremote} connect ${port} cp ':${remotePath}' '${localPath}'`);

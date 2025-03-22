@@ -152,6 +152,19 @@ async function activate(context) {
         });
     }));
     /*
+     *  Show the device's flash filesystem usage with 'mpremote df'.
+     */
+    context.subscriptions.push(vscode.commands.registerCommand('mpremote.df', async (args) => {
+        let port = '';
+        if (args === undefined || args.label === undefined) {
+            port = await (0, utility_1.getDevicePort)(serialPortDataProvider.getPortNames());
+        }
+        else {
+            port = args.label;
+        }
+        mpremote.df(port);
+    }));
+    /*
      *  Run 'mpremote exec to run a python statement on the device.
      */
     context.subscriptions.push(vscode.commands.registerCommand('mpremote.exec', async (args) => {

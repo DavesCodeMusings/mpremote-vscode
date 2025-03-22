@@ -158,6 +158,20 @@ export async function activate(context: vscode.ExtensionContext) {
 	}));
 
 	/*
+	 *  Show the device's flash filesystem usage with 'mpremote df'.
+	 */
+	context.subscriptions.push(vscode.commands.registerCommand('mpremote.df', async (args) => {
+		let port: string = '';
+		if (args === undefined || args.label === undefined) {
+			port = await getDevicePort(serialPortDataProvider.getPortNames());
+		}
+		else {
+			port = args.label;
+		}
+		mpremote.df(port);
+	}));
+
+	/*
 	 *  Run 'mpremote exec to run a python statement on the device.
 	 */
 	context.subscriptions.push(vscode.commands.registerCommand('mpremote.exec', async (args) => {
