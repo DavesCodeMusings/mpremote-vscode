@@ -98,7 +98,7 @@ export function getSerialPortList() {
     }
     let ports: SerialPort[] = [];
     let mpremote = getMPRemoteName();
-    let devsOutput = execSync(`${mpremote} devs`).toString().split('\r\n');
+    let devsOutput = execSync(`${mpremote} devs`).toString().split(/\r?\n/);
     devsOutput.forEach(line => {
         if (line) {
             let [path, serialNumber, pnpId, manufacturer, product] = line.split(" ");
