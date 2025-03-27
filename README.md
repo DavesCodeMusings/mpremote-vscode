@@ -48,6 +48,9 @@ PATCH = extension version
 
 ## Release Notes
 
+### 1.21.19
+Bug fix for Linux serial port detection (issue #35).
+
 ### 1.21.18
 Enhancement to add the `df` command to show flash file system usage (issue #34).
 
