@@ -7,7 +7,10 @@ const child_process_1 = require("child_process");
 exports.STAT_MASK_DIR = 0x4000;
 exports.STAT_MASK_FILE = 0x8000;
 exports.STAT_MASK_ALL = 0xFFFF;
-exports.SYNC_IGNORE = ['.git']; // prevent uploading source control dirs to flash
+exports.SYNC_IGNORE = [
+    '.git',
+    '__pycache__' // when code is run in VS Code Python
+];
 /**
  *  Look up the user configured way of calling mpremote for the system. If
  *  not explicitly configured, make an educated guess based on the operating
@@ -91,7 +94,7 @@ exports.getRemoteDirEntries = getRemoteDirEntries;
 function getSerialPortList() {
     let ports = [];
     let mpremote = getMPRemoteName();
-    let devsOutput = (0, child_process_1.execSync)(`${mpremote} devs`).toString().split('\r\n');
+    let devsOutput = (0, child_process_1.execSync)(`${mpremote} devs`).toString().split(/\r?\n/);
     devsOutput.forEach(line => {
         if (line) {
             let [path, serialNumber, pnpId, manufacturer, product] = line.split(" ");

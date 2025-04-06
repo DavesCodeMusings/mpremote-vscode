@@ -6,7 +6,10 @@ export const STAT_MASK_DIR = 0x4000;
 export const STAT_MASK_FILE = 0x8000;
 export const STAT_MASK_ALL = 0xFFFF;
 
-export const SYNC_IGNORE = ['.git'];  // prevent uploading source control dirs to flash
+export const SYNC_IGNORE = [
+    '.git',  // when using git source control
+    '__pycache__'  // when code is run in VS Code Python
+];
 
 /**
  *  Look up the user configured way of calling mpremote for the system. If
