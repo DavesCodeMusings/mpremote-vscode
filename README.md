@@ -48,6 +48,9 @@ PATCH = extension version
 
 ## Release Notes
 
+### 1.21.20
+Enhancement to skip __pycache__ on recursive uploads (issue #36).
+
 ### 1.21.19
 Bug fix for Linux serial port detection (issue #35).
 
