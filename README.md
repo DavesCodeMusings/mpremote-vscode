@@ -48,6 +48,9 @@ PATCH = extension version
 
 ## Release Notes
 
+### 1.21.21
+Enhancement to add "Run on remote device (run)" to the editor toolbar's Run button.
+
 ### 1.21.20
 Enhancement to skip `__pycache__` on recursive uploads (issue #36).
 
