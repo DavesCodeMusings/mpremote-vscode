@@ -181,6 +181,13 @@
           "when": "resourceExtname == .mpy || resourceExtname == .py || resourceLangId == python"
         }
       ],
+      "editor/title/run": [
+        {
+          "command": "mpremote.run",
+          "group": "navigation",
+          "when": "resourceExtname == .mpy || resourceExtname == .py || resourceLangId == python"
+        }
+      ],
       "explorer/context": [
         {
           "submenu": "mpremote.editorContextSubMenu",
