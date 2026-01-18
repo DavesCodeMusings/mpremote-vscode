@@ -32,21 +32,12 @@ The mpremote module can be installed with pip, like this:
 `py -m pip install mpremote`
 
 ## About Version Numbers
-This extension's version numbers are tied to the major and minor version
-of mpremote. The first two numbers indicate the version of mpremote this
-extension was devloped and tested with. The final number is used to track
-enhancements and bug fixes to this extension.
-
-For example:
-* 0.4.0 of the extension was developed for mpremote 0.4.0
-* 0.4.1 is an enhancement to the extension developed for mpremote 0.4.0
-
-So, given MAJOR.MINOR.PATCH ...
-MAJOR = mpremote major,
-MINOR = mpremote minor,
-PATCH = extension version
+Older version numbers attempted to follow MicroPython's mpremote version. Starting with 2.0, this extension's version is independent.
 
 ## Release Notes
+
+### 2.0.0
+Standardize on semantic versioning.
 
 ### 1.21.21
 Enhancement to add "Run on remote device (run)" to the editor toolbar's Run button.
