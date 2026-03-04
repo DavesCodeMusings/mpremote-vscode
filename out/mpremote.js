@@ -34,7 +34,7 @@ class MPRemote {
     }
     cat(port, filePath) {
         if (port) {
-            this.terminal.sendText(`${this.mpremote} connect ${port} cat '${filePath}'`);
+            this.terminal.sendText(`${this.mpremote} connect ${port} cat "${filePath}"`);
         }
     }
     df(port) {
@@ -44,12 +44,12 @@ class MPRemote {
     }
     download(port, remotePath, localPath) {
         if (port) {
-            this.terminal.sendText(`${this.mpremote} connect ${port} cp ':${remotePath}' '${localPath}'`);
+            this.terminal.sendText(`${this.mpremote} connect ${port} cp ":${remotePath}" "${localPath}"`);
         }
     }
     exec(port, codeString) {
         if (port) {
-            this.terminal.sendText(`${this.mpremote} connect ${port} exec '${codeString}'`);
+            this.terminal.sendText(`${this.mpremote} connect ${port} exec "${codeString}"`);
         }
     }
     listDevs() {
@@ -57,7 +57,7 @@ class MPRemote {
     }
     ls(port, dir) {
         if (port) {
-            this.terminal.sendText(`${this.mpremote} connect ${port} fs ls '${dir}'`);
+            this.terminal.sendText(`${this.mpremote} connect ${port} fs ls "${dir}"`);
         }
     }
     mipInstall(port, pkg) {
@@ -67,7 +67,7 @@ class MPRemote {
     }
     mkdir(port, dirPath) {
         if (port) {
-            this.terminal.sendText(`${this.mpremote} connect ${port} fs mkdir '${dirPath}'`);
+            this.terminal.sendText(`${this.mpremote} connect ${port} fs mkdir "${dirPath}"`);
         }
     }
     repl(port) {
@@ -82,17 +82,17 @@ class MPRemote {
     }
     rm(port, filePath) {
         if (port && filePath) {
-            this.terminal.sendText(`${this.mpremote} connect ${port} fs rm ':${filePath}'`);
+            this.terminal.sendText(`${this.mpremote} connect ${port} fs rm ":${filePath}"`);
         }
     }
     rmdir(port, dirPath) {
         if (port && dirPath) {
-            this.terminal.sendText(`${this.mpremote} connect ${port} fs rmdir ':${dirPath}'`);
+            this.terminal.sendText(`${this.mpremote} connect ${port} fs rmdir ":${dirPath}"`);
         }
     }
     run(port, filePath) {
         if (port && filePath) {
-            this.terminal.sendText(`${this.mpremote} connect ${port} run '${filePath}'`);
+            this.terminal.sendText(`${this.mpremote} connect ${port} run "${filePath}"`);
         }
     }
     setrtc(port) {
@@ -103,7 +103,7 @@ class MPRemote {
     sync(port, localRoot) {
         if (port && localRoot) {
             console.debug("Sync it up, Kris! I'm about to.");
-            this.terminal.sendText(`cd '${localRoot}'`);
+            this.terminal.sendText(`cd "${localRoot}"`);
             (0, fs_1.readdir)(localRoot, { withFileTypes: true }, (err, entries) => {
                 if (err) {
                     console.error(err);
@@ -111,7 +111,7 @@ class MPRemote {
                 }
                 else {
                     console.debug('Directory entries found:', entries.length);
-                    this.terminal.sendText(`cd '${localRoot}'`);
+                    this.terminal.sendText(`cd "${localRoot}"`);
                     entries.forEach(entry => {
                         console.debug('Examining directory entry:', entry);
                         if (entry.isDirectory()) {
@@ -119,13 +119,13 @@ class MPRemote {
                                 console.debug('Skipping directory:', entry.name);
                             }
                             else {
-                                console.debug(`${this.mpremote} connect ${port} fs cp -r '${entry.name}' :`);
-                                this.terminal.sendText(`${this.mpremote} connect ${port} fs cp -r '${entry.name}' :`);
+                                console.debug(`${this.mpremote} connect ${port} fs cp -r "${entry.name}" :`);
+                                this.terminal.sendText(`${this.mpremote} connect ${port} fs cp -r "${entry.name}" :`);
                             }
                         }
                         else {
-                            console.debug(`${this.mpremote} connect ${port} fs cp '${entry.name}' :`);
-                            this.terminal.sendText(`${this.mpremote} connect ${port} fs cp '${entry.name}' :`);
+                            console.debug(`${this.mpremote} connect ${port} fs cp "${entry.name}" :`);
+                            this.terminal.sendText(`${this.mpremote} connect ${port} fs cp "${entry.name}" :`);
                         }
                     });
                 }
@@ -134,7 +134,7 @@ class MPRemote {
     }
     upload(port, localPath, remotePath) {
         if (port && localPath && remotePath) {
-            this.terminal.sendText(`${this.mpremote} connect ${port} cp '${localPath}' ':${remotePath}'`);
+            this.terminal.sendText(`${this.mpremote} connect ${port} cp "${localPath}" ":${remotePath}"`);
         }
     }
     version(port) {
