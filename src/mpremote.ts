@@ -150,7 +150,7 @@ export class MPRemote {
 
     upload(port: string, localPath: string, remotePath: string) {
         if (port && localPath && remotePath) {
-            this.terminal.sendText(`${this.mpremote} connect ${port} cp '${localPath}' ':${remotePath}'`);
+            this.terminal.sendText(`${this.mpremote} connect ${port} cp ${localPath} :${remotePath}`);
         }
     }
 
