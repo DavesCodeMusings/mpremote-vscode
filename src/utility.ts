@@ -102,6 +102,11 @@ export function getSerialPortList() {
     let ports: SerialPort[] = [];
     let mpremote = getMPRemoteName();
     let devsOutput = execSync(`${mpremote} devs`).toString().split(/\r?\n/);
+    if (vscode.workspace.getConfiguration('mpremote').serialPort.filter) {
+        console.debug('Filtering serial ports for string:', vscode.workspace.getConfiguration('mpremote').serialPort.filter);
+        devsOutput = devsOutput.filter(name => name.includes(vscode.workspace.getConfiguration('mpremote').serialPort.filter));
+        console.debug('Filtered list:', devsOutput);
+    }
     devsOutput.forEach(line => {
         if (line) {
             let [path, serialNumber, pnpId, manufacturer, product] = line.split(" ");

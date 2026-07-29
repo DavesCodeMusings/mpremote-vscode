@@ -140,6 +140,11 @@
           "default": "",
           "description": "If mpremote is not running correctly in the extension (as 'py.exe -m mpremote', 'python3 -m mpremote', or 'mpremote'), enter its custom command here and restart VS Code."
         },
+        "mpremote.serialPort.filter": {
+          "type": "string",
+          "default": "",
+          "description": "On a system that has many serial port devices, show only those with names that include the filter string. For example, enter ACM here to show only /dev/ACM0, /dev/ACM1, etc. devices and not /dev/ttyS0, /dev/ttyS1, and so on."
+        },
         "mpremote.serialPort.skip": {
           "type": "string",
           "default": "",
