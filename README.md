@@ -36,6 +36,9 @@ Older version numbers attempted to follow MicroPython's mpremote version. Starti
 
 ## Release Notes
 
+### 2.1.0
+Enhancement to filter serial ports detected based on keyword. For example, ACM to only show /dev/ACM0, /dev/ACM1, etc. and skip any others.
+
 ### 2.0.0
 Standardize on semantic versioning.
 
